@@ -27,27 +27,27 @@
 <meta property="og:site_name" content="Blue Flamingo">
 <meta property="og:description" content="This article introudce the concept of process, its life cycle, implementation and several different process state models. It also discusses the counterpart of threads and techniques of multi-threading">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Processes-and-Threads/Processes-and-Threads/pte.png">
-<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Processes-and-Threads/Processes-and-Threads/2state.png">
-<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Processes-and-Threads/Processes-and-Threads/3state.png">
-<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Processes-and-Threads/Processes-and-Threads/5state.png">
-<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Processes-and-Threads/Processes-and-Threads/suspend.png">
-<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Processes-and-Threads/Processes-and-Threads/queue.png">
-<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Processes-and-Threads/Processes-and-Threads/multi.png">
-<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Processes-and-Threads/Processes-and-Threads/cpu.png">
-<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Processes-and-Threads/Processes-and-Threads/web.png">
-<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Processes-and-Threads/Processes-and-Threads/thread.png">
-<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Processes-and-Threads/Processes-and-Threads/prop.png">
-<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Processes-and-Threads/Processes-and-Threads/multithread.png">
-<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Processes-and-Threads/Processes-and-Threads/imple.png">
-<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Processes-and-Threads/Processes-and-Threads/pac.png">
-<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Processes-and-Threads/Processes-and-Threads/rela.png">
+<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Processes-and-Threads/pte.png">
+<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Processes-and-Threads/2state.png">
+<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Processes-and-Threads/3state.png">
+<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Processes-and-Threads/5state.png">
+<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Processes-and-Threads/suspend.png">
+<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Processes-and-Threads/queue.png">
+<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Processes-and-Threads/multi.png">
+<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Processes-and-Threads/cpu.png">
+<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Processes-and-Threads/web.png">
+<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Processes-and-Threads/thread.png">
+<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Processes-and-Threads/prop.png">
+<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Processes-and-Threads/multithread.png">
+<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Processes-and-Threads/imple.png">
+<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Processes-and-Threads/pac.png">
+<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Processes-and-Threads/rela.png">
 <meta property="article:published_time" content="2020-08-03T19:06:26.000Z">
 <meta property="article:modified_time" content="2020-12-11T02:10:23.633Z">
 <meta property="article:author" content="Katherine">
 <meta property="article:tag" content="Operating Systems">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://blueflamingo.tech/2020/08/03/Processes-and-Threads/Processes-and-Threads/pte.png">
+<meta name="twitter:image" content="https://blueflamingo.tech/2020/08/03/Processes-and-Threads/pte.png">
 
 <link rel="canonical" href="https://blueflamingo.tech/2020/08/03/Processes-and-Threads/">
 
@@ -292,7 +292,7 @@
 <li>Killed by another process (involuntary)</li>
 </ul>
 <h2 id="Implementation-of-Processes"><a href="#Implementation-of-Processes" class="headerlink" title="Implementation of Processes"></a>Implementation of Processes</h2><p>The operating system maintains a table (an array of structures), called the <strong>process table</strong>, with one entry (<strong>process control block</strong>) per process, which contains important information about the process’s state.</p>
-<img src="Processes-and-Threads/pte.png" style="zoom:40%;" />
+<img src="/2020/08/03/Processes-and-Threads/pte.png" style="zoom:40%;">
 
 <h2 id="Process-State-Models"><a href="#Process-State-Models" class="headerlink" title="Process State Models"></a>Process State Models</h2><h3 id="A-Two-State-Process-Model"><a href="#A-Two-State-Process-Model" class="headerlink" title="A Two-State Process Model"></a>A Two-State Process Model</h3><p>In this model, a process may be in one of two states: <strong>Running</strong> or <strong>Not Running</strong>.  </p>
 <ul>
@@ -301,7 +301,7 @@
 <li>The former process moves from the Running state to the Not Running state, and one of the other processes moves to the Running state. </li>
 </ul>
 <p>Process not running must be kept in a <strong>queue</strong>, waiting their turn to execute.</p>
-<img src="Processes-and-Threads/2state.png" style="zoom:40%;" />
+<img src="/2020/08/03/Processes-and-Threads/2state.png" style="zoom:40%;">
 
 <h3 id="A-Three-State-Process-Model"><a href="#A-Three-State-Process-Model" class="headerlink" title="A Three-State Process Model"></a>A Three-State Process Model</h3><p>In this model, a process may be in three states:</p>
 <ul>
@@ -309,14 +309,14 @@
 <li><strong>Ready</strong> (runnable; temporarily stopped to let another process run)</li>
 <li><strong>Blocked</strong> (unable to run until some externel event happens)</li>
 </ul>
-<img src="Processes-and-Threads/3state.png" style="zoom:40%;" />
+<img src="/2020/08/03/Processes-and-Threads/3state.png" style="zoom:40%;">
 
 <h3 id="A-Five-State-Process-Model"><a href="#A-Five-State-Process-Model" class="headerlink" title="A Five-State Process Model"></a>A Five-State Process Model</h3><p>In this model, we add the New and Exit states:</p>
 <ul>
 <li><strong>New</strong>: created but has not yet been admitted to the pool of executable processes. For example, although the process control block has been created, the new process may not yet has been loaded into main memory.</li>
 <li><strong>Exit</strong>: released from the pool of executable processes because it halted or aborted.</li>
 </ul>
-<img src="Processes-and-Threads/5state.png" style="zoom:40%;" />
+<img src="/2020/08/03/Processes-and-Threads/5state.png" style="zoom:40%;">
 
 <h3 id="With-suspened-states"><a href="#With-suspened-states" class="headerlink" title="With suspened states"></a>With suspened states</h3><p>When none of the processes in main memory is in the Ready queue:</p>
 <ul>
@@ -333,7 +333,7 @@
 <li><strong>Blocked/Suspend</strong>: in secondary memory and waiting on an event</li>
 <li><strong>Ready/Suspend</strong>: in secondary memory but ready for execution</li>
 </ul>
-<img src="Processes-and-Threads/suspend.png" style="zoom:40%;" />
+<img src="/2020/08/03/Processes-and-Threads/suspend.png" style="zoom:40%;">
 
 <h3 id="Using-queues-to-Mange-Processes"><a href="#Using-queues-to-Mange-Processes" class="headerlink" title="Using queues to Mange Processes"></a>Using queues to Mange Processes</h3><p>In the two-state model, we maintain process in the Not Running state in a single queue. However, this implementation is inadquate: some processes in the Not Running state are ready to execute while others are blocked. Thus, with a single queue, the dispatcher would have to scan the queue looking for a ready one.</p>
 <p>We can manage the processes with two queues: a <strong>Ready queue</strong> and a <strong>Blocked</strong> queue. </p>
@@ -344,13 +344,13 @@
 <li>When an event occurs, any process in the Blocked queue waiting on that event only is moved to the Ready queue.</li>
 </ul>
 <p>We can also use multiple Blocked queues, one for each event. </p>
-<img src="Processes-and-Threads/queue.png" style="zoom:40%;" />
+<img src="/2020/08/03/Processes-and-Threads/queue.png" style="zoom:40%;">
 
 <h2 id="Multiprogramming"><a href="#Multiprogramming" class="headerlink" title="Multiprogramming"></a>Multiprogramming</h2><p>Conceptually, each process has its own virtual CPU. In reality, the real CPU switched back and forth from process to process. This rapid switching is call <strong>multiprogramming</strong>. At any given time, only one process is actually running.</p>
-<img src="Processes-and-Threads/multi.png" style="zoom:40%;" />
+<img src="/2020/08/03/Processes-and-Threads/multi.png" style="zoom:40%;">
 
 <p>Suppose that a process spends a fraction $p$ of its time waiting for I/O to complete. With $n$ rpocesses in memory at once, the <strong>CPU utilization = $1- p^n$</strong>, which is called the <strong>degree of multiprogramming</strong>.</p>
-<img src="Processes-and-Threads/cpu.png" style="zoom:40%;" />
+<img src="/2020/08/03/Processes-and-Threads/cpu.png" style="zoom:40%;">
 
 <h1 id="Threads"><a href="#Threads" class="headerlink" title="Threads"></a>Threads</h1><p>All threads of a process share the same address space and resources (except for stack). </p>
 <p>There are several reasons for having threads:</p>
@@ -365,21 +365,21 @@
 <li>When the worker wakes up, it checks to see if the request can be satisfied from the Web page cache. If not, it <strong>read</strong> from the disk and block until the disk operation completes.</li>
 <li>When the worker locks, another thread is chose to run.</li>
 </ul>
-<img src="Processes-and-Threads/web.png" style="zoom:40%;" />
+<img src="/2020/08/03/Processes-and-Threads/web.png" style="zoom:40%;">
 
 <h2 id="Processes-amp-Threads"><a href="#Processes-amp-Threads" class="headerlink" title="Processes &amp; Threads"></a>Processes &amp; Threads</h2><p>In a multithreaded environment, there is stilll a single process control block and user address space, but now there are <strong>separate</strong> stacks for each thread, as well as a separate control block containing register values, priority and other thread-realated state information. There is no protection between threads. </p>
-<img src="Processes-and-Threads/thread.png" style="zoom:40%;" />
+<img src="/2020/08/03/Processes-and-Threads/thread.png" style="zoom:40%;">
 
 <p>Process is the unit of resource management, while thread is the unit of execution.</p>
-<img src="Processes-and-Threads/prop.png" style="zoom:40%;" />
+<img src="/2020/08/03/Processes-and-Threads/prop.png" style="zoom:40%;">
 
 <h2 id="Multithreading"><a href="#Multithreading" class="headerlink" title="Multithreading"></a>Multithreading</h2><p>Allowing multiple threads in the same process is called <strong>multithreading</strong>. On a uniprocessor, multiprogramming enables the interlevaing of multiple threads within multiple processres.</p>
-<img src="Processes-and-Threads/multithread.png" style="zoom:40%;" />
+<img src="/2020/08/03/Processes-and-Threads/multithread.png" style="zoom:40%;">
 
 <h2 id="Implementation-of-Threads"><a href="#Implementation-of-Threads" class="headerlink" title="Implementation of Threads"></a>Implementation of Threads</h2><p>There are two main places to implement threads: user space and kernel space, and a hybrid choice is also possible.</p>
-<img src="Processes-and-Threads/imple.png" style="zoom:40%;" />
+<img src="/2020/08/03/Processes-and-Threads/imple.png" style="zoom:40%;">
 
-<img src="Processes-and-Threads/pac.png" style="zoom:40%;" />
+<img src="/2020/08/03/Processes-and-Threads/pac.png" style="zoom:40%;">
 
 <h3 id="User-Level-Threads-ULTs"><a href="#User-Level-Threads-ULTs" class="headerlink" title="User-Level Threads (ULTs)"></a>User-Level Threads (ULTs)</h3><p>In ULT, thread management is done by the application and the kernel is not aware of the existence of threads. With this approach, threads are implemented by a library. </p>
 <p>The kernel continues to schedule the process as a unit and assigns a single execution state.</p>
@@ -411,7 +411,7 @@
 </ul>
 <p>The principal <strong>disadvantage</strong> is the substantial cost of system call. When a thread wants to create a new thread or destroy an existing thread, it makes a kernel call. All calls that may blcok a thread are also implemented as system calls, at considerably greater cost than a call to a run-time systm procedure.</p>
 <h3 id="Hybrid-Approach"><a href="#Hybrid-Approach" class="headerlink" title="Hybrid Approach"></a>Hybrid Approach</h3><p>In a combined system, thread creation is done completely in user space, as is the bulk of the scheduling and synchronization of threads within an application. The multiple ULTs from a single application are mapped onto some (smaller or equal) number of KLTs.</p>
-<img src="Processes-and-Threads/rela.png" style="zoom:40%;" />
+<img src="/2020/08/03/Processes-and-Threads/rela.png" style="zoom:40%;">
 
 
     </div>
@@ -511,7 +511,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">29</span>
+          <span class="site-state-item-count">30</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>

@@ -27,16 +27,16 @@
 <meta property="og:site_name" content="Blue Flamingo">
 <meta property="og:description" content="This paper proposes a zigzag learning strategy to run object detection under a weakly supervised paradigm and prevent the model from overfitting initial seeds.">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://blueflamingo.tech/2019/04/16/Zigzag-Learning-for-Weakly-Supervised-Object-Detection/Zigzag-Learning-for-Weakly-Supervised-Object-Detection/model.png">
-<meta property="og:image" content="https://blueflamingo.tech/2019/04/16/Zigzag-Learning-for-Weakly-Supervised-Object-Detection/Zigzag-Learning-for-Weakly-Supervised-Object-Detection/WSDDN.png">
-<meta property="og:image" content="https://blueflamingo.tech/2019/04/16/Zigzag-Learning-for-Weakly-Supervised-Object-Detection/Zigzag-Learning-for-Weakly-Supervised-Object-Detection/algorithm.png">
+<meta property="og:image" content="https://blueflamingo.tech/Zigzag-Learning-for-Weakly-Supervised-Object-Detection/model.png">
+<meta property="og:image" content="https://blueflamingo.tech/Zigzag-Learning-for-Weakly-Supervised-Object-Detection/WSDDN.png">
+<meta property="og:image" content="https://blueflamingo.tech/Zigzag-Learning-for-Weakly-Supervised-Object-Detection/algorithm.png">
 <meta property="article:published_time" content="2019-04-16T20:16:45.000Z">
 <meta property="article:modified_time" content="2019-04-17T06:32:56.000Z">
 <meta property="article:author" content="Katherine">
 <meta property="article:tag" content="Paper Review">
 <meta property="article:tag" content="Object Detection">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://blueflamingo.tech/2019/04/16/Zigzag-Learning-for-Weakly-Supervised-Object-Detection/Zigzag-Learning-for-Weakly-Supervised-Object-Detection/model.png">
+<meta name="twitter:image" content="https://blueflamingo.tech/Zigzag-Learning-for-Weakly-Supervised-Object-Detection/model.png">
 
 <link rel="canonical" href="https://blueflamingo.tech/2019/04/16/Zigzag-Learning-for-Weakly-Supervised-Object-Detection/">
 
@@ -265,9 +265,9 @@
 <li>The second module progressively adds sample to network training in an easy-to-difficult order</li>
 <li>The third module regularize the high responsive patches to enhance the generalization ability of the model</li>
 </ol>
-<p><img src="Zigzag-Learning-for-Weakly-Supervised-Object-Detection/model.png"></p>
+<p><img src="/Zigzag-Learning-for-Weakly-Supervised-Object-Detection/model.png"></p>
 <h2 id="Step1-Estimate-Image-Difficulty"><a href="#Step1-Estimate-Image-Difficulty" class="headerlink" title="Step1 - Estimate Image Difficulty"></a>Step1 - Estimate Image Difficulty</h2><p>This paper utilzes the WSDDN as the baeline network.</p>
-<p><img src="Zigzag-Learning-for-Weakly-Supervised-Object-Detection/WSDDN.png" alt="Weakly-supervised deep detection network. The figure illustrates the architecture of WSDDN"></p>
+<p><img src="/Zigzag-Learning-for-Weakly-Supervised-Object-Detection/WSDDN.png" alt="Weakly-supervised deep detection network. The figure illustrates the architecture of WSDDN"></p>
 <p>Given an image $x$ with region proposals $R$ (obtained by Edge Boxes in this paper), and image level labels $y\in {1,-1}^C$, where $y_c=1\ (y_c=-1)$ indictes the presence (absense) of an object class $c$, the score of resion $r$ corresponding to class $c$ is defined as:<br>$$<br>x_{cr} = \frac{e^{\phi^{cr}(x,f_{c_{8C}})}}{\sum_{i=1}^Ce^{\phi^{ir}(x, f_{c_{8C}})}}.*\frac{e^{\phi^{cr}(x,f_{c_{8R}})}}{\sum_{j=1}^{|\mathcal{R}|}e^{\phi^{cj}(x, f_{c_{8R}})}}<br>$$</p>
 <blockquote>
 <p>$\phi(x, f_{c_{8C}}), \phi(x, f_{c_{8R}})$: the outputs of $f_{c_{8C}}$ and $f_{c_{8R}}$ layer, respectively, with size $C\times|\mathcal R|$, where $C$ as the number of categories and $|\mathcal R|$ as the number of regions</p>
@@ -302,7 +302,7 @@
 <p>$\phi(x,f_{conv})$: the last convolutional feature maps</p>
 </blockquote>
 <p>The whole process is summarized as:</p>
-<p><img src="Zigzag-Learning-for-Weakly-Supervised-Object-Detection/algorithm.png"></p>
+<p><img src="/Zigzag-Learning-for-Weakly-Supervised-Object-Detection/algorithm.png"></p>
 <h1 id="Question"><a href="#Question" class="headerlink" title="Question"></a>Question</h1><ol>
 <li><p>In the estimating image difficulty step, given an image $x$ with label $y\in{1,-1}^C$, we compute $mEAS(X_c)$ for each $y_c=1$, while in the processive learning step, the training images are divided into flods according to mEAS.</p>
 <p>What is the mEAS for an image x, is this just computed by $mEAS(X) =\sum_{c=1}^C mEAS(X_c)$?</p>
@@ -409,7 +409,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">29</span>
+          <span class="site-state-item-count">30</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>

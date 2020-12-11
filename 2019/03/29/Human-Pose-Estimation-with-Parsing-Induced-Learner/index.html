@@ -27,15 +27,15 @@
 <meta property="og:site_name" content="Blue Flamingo">
 <meta property="og:description" content="This paper proposes a novel Parsing Induced Learner to exploit parsing information to effectively assist pose estimation by learning to fast adpat the base pose estimation model.">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://blueflamingo.tech/2019/03/29/Human-Pose-Estimation-with-Parsing-Induced-Learner/Human-Pose-Estimation-with-Parsing-Induced-Learner/model.png">
-<meta property="og:image" content="https://blueflamingo.tech/2019/03/29/Human-Pose-Estimation-with-Parsing-Induced-Learner/Human-Pose-Estimation-with-Parsing-Induced-Learner/pa.png">
+<meta property="og:image" content="https://blueflamingo.tech/Human-Pose-Estimation-with-Parsing-Induced-Learner/model.png">
+<meta property="og:image" content="https://blueflamingo.tech/Human-Pose-Estimation-with-Parsing-Induced-Learner/pa.png">
 <meta property="article:published_time" content="2019-03-29T18:45:57.000Z">
 <meta property="article:modified_time" content="2019-04-17T13:28:30.000Z">
 <meta property="article:author" content="Katherine">
 <meta property="article:tag" content="Paper Review">
 <meta property="article:tag" content="Pose Estimation">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://blueflamingo.tech/2019/03/29/Human-Pose-Estimation-with-Parsing-Induced-Learner/Human-Pose-Estimation-with-Parsing-Induced-Learner/model.png">
+<meta name="twitter:image" content="https://blueflamingo.tech/Human-Pose-Estimation-with-Parsing-Induced-Learner/model.png">
 
 <link rel="canonical" href="https://blueflamingo.tech/2019/03/29/Human-Pose-Estimation-with-Parsing-Induced-Learner/">
 
@@ -274,7 +274,7 @@
 <li>A parameter adapter $K_\phi(\cdot)$ for learning the dynamic parameters $\theta’$ by taking the features output of the parsing encoder $E_{\theta^S}^S(\cdot)$ .</li>
 </ol>
 <p>Therefore,  $\theta’$ can be formulated as:<br>$$<br>\theta’ = g(I,S):= K_\phi(E_{\theta_S}^S(I))<br>$$</p>
-<p><img src="Human-Pose-Estimation-with-Parsing-Induced-Learner/model.png"></p>
+<p><img src="/Human-Pose-Estimation-with-Parsing-Induced-Learner/model.png"></p>
 <h2 id="Pose-Encoder"><a href="#Pose-Encoder" class="headerlink" title="Pose Encoder"></a>Pose Encoder</h2><p>The pose encoder $E_{\theta^p}^P(\cdot)$ extracts dicriminative features $F^P = E_{\theta^P}^P(I)$ from the imput image $I$.</p>
 <p>This paper implements it via VGG16 based Fully Convolutional Network (FCN)  and Hourglass network, respectively.</p>
 <h2 id="PIL"><a href="#PIL" class="headerlink" title="PIL"></a>PIL</h2><p>The proposed PIL consists of a <strong>parsing encoder</strong> for extracting the parsing features, and a <strong>parameter adapter</strong> for learning the dynamic parameters $\theta’$ </p>
@@ -286,7 +286,7 @@
 <p>$c=c_i\times c_o$: the numbers of channels to learn for adapative convolution</p>
 <p>$c_i, c_o$: the number of input and output channels, respectively</p>
 </blockquote>
-<p><img src="Human-Pose-Estimation-with-Parsing-Induced-Learner/pa.png"></p>
+<p><img src="/Human-Pose-Estimation-with-Parsing-Induced-Learner/pa.png"></p>
 <p>This paper implements it by a small CNN with learnable parameters $\phi$.</p>
 <p>In practice, it is infeasible to directly predict all the convolutional parameters due to their large scale. To solve this problem, this paper perform the following factorization to reduce the number of free parameters<br>$$<br>\theta’=U * \tilde{\theta}*_c V<br>$$</p>
 <blockquote>
@@ -446,7 +446,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">29</span>
+          <span class="site-state-item-count">30</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>

@@ -27,31 +27,31 @@
 <meta property="og:site_name" content="Blue Flamingo">
 <meta property="og:description" content="This article discusses what kind of memory management we need and several important design features to obtain it, such as address space, virtual memory and page replacement.">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Memory-Management/Memory-Management/phi.png">
-<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Memory-Management/Memory-Management/two.png">
-<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Memory-Management/Memory-Management/swap.png">
-<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Memory-Management/Memory-Management/grow.png">
-<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Memory-Management/Memory-Management/mana.png">
-<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Memory-Management/Memory-Management/termi.png">
-<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Memory-Management/Memory-Management/mmu.png">
-<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Memory-Management/Memory-Management/map.png">
-<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Memory-Management/Memory-Management/pte.png">
-<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Memory-Management/Memory-Management/tlb.png">
-<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Memory-Management/Memory-Management/mlt.png">
-<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Memory-Management/Memory-Management/share.png">
-<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Memory-Management/Memory-Management/chance.png">
-<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Memory-Management/Memory-Management/clock.png">
-<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Memory-Management/Memory-Management/aging.png">
-<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Memory-Management/Memory-Management/work.png">
-<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Memory-Management/Memory-Management/worka.png">
-<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Memory-Management/Memory-Management/wsc.png">
-<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Memory-Management/Memory-Management/pff.png">
+<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Memory-Management/phi.png">
+<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Memory-Management/two.png">
+<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Memory-Management/swap.png">
+<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Memory-Management/grow.png">
+<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Memory-Management/mana.png">
+<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Memory-Management/termi.png">
+<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Memory-Management/mmu.png">
+<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Memory-Management/map.png">
+<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Memory-Management/pte.png">
+<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Memory-Management/tlb.png">
+<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Memory-Management/mlt.png">
+<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Memory-Management/share.png">
+<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Memory-Management/chance.png">
+<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Memory-Management/clock.png">
+<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Memory-Management/aging.png">
+<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Memory-Management/work.png">
+<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Memory-Management/worka.png">
+<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Memory-Management/wsc.png">
+<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Memory-Management/pff.png">
 <meta property="article:published_time" content="2020-08-03T19:07:47.000Z">
 <meta property="article:modified_time" content="2020-12-11T01:59:16.894Z">
 <meta property="article:author" content="Katherine">
 <meta property="article:tag" content="Operating Systems">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://blueflamingo.tech/2020/08/03/Memory-Management/Memory-Management/phi.png">
+<meta name="twitter:image" content="https://blueflamingo.tech/2020/08/03/Memory-Management/phi.png">
 
 <link rel="canonical" href="https://blueflamingo.tech/2020/08/03/Memory-Management/">
 
@@ -281,7 +281,7 @@
 <li>Physical organization</li>
 </ul>
 <h1 id="No-Memory-Abstraction"><a href="#No-Memory-Abstraction" class="headerlink" title="No Memory Abstraction"></a>No Memory Abstraction</h1><p>With the model of memory being just physical memory, generally only one process at a time can be running.</p>
-<img src="Memory-Management/phi.png" style="zoom:40%;" />
+<img src="/2020/08/03/Memory-Management/phi.png" style="zoom:40%;">
 
 <p>One way to get some parallelism in such a system with no memory abstracion is to program with multiple threads, since all threads in a process are supposed to see the same memory image.</p>
 <p>It is also possible to run multiple programs at the same time by <strong>swapping</strong>, the OS:</p>
@@ -290,7 +290,7 @@
 <li>then brings in and runs the next program</li>
 </ul>
 <p>Suppose two programs loaded consecutively into memory, it raises a problem that the two programs both reference absoulte physical memory. </p>
-<img src="Memory-Management/two.png" style="zoom:40%;" />
+<img src="/2020/08/03/Memory-Management/two.png" style="zoom:40%;">
 
 <p>One solution is called <strong>static relocation</strong>. When a program was loaded, the constant of starting address is added to every program address. However, it’s quite slow, and requires some way to tell what is an address and what is a constant.</p>
 <h1 id="Memory-Abstraction-Address-space"><a href="#Memory-Abstraction-Address-space" class="headerlink" title="Memory Abstraction: Address space"></a>Memory Abstraction: Address space</h1><p>An <strong>address space</strong> is the set of addresses that a procss can use to address memory. Each process has its own address space, independent of those belonging to other processes.</p>
@@ -307,7 +307,7 @@
 <p>The base and limit registers are protected so that only the operating system can modify them.</p>
 <p>A <strong>disadvantage</strong> is the need to perform an addition and a comparsion on every memory reference.</p>
 <h2 id="Swapping"><a href="#Swapping" class="headerlink" title="Swapping"></a>Swapping</h2><p>In practice, the total amount of RAM needed by all the processes is oftern much more than can fit in memory. The simplest strategy to dealing with memory overload, called <strong>swapping</strong>, consists of bringing in each process in its entirety, running it for a while, then putting it back on the disk.</p>
-<img src="Memory-Management/swap.png" style="zoom:40%;" />
+<img src="/2020/08/03/Memory-Management/swap.png" style="zoom:40%;">
 
 <p>When swapping creates multiple holes in memory, it is possible to combine them all into a big one by moving all the processes downward as far as possible, which is called <strong>memory compaction</strong>.</p>
 <p>If a process tries a grow:</p>
@@ -317,16 +317,16 @@
 <li>if it cannot grow in memory and the swap area on the disk is full, the process has to be suspended until there is enough memory</li>
 </ul>
 <p>Since most processes tend to grow, it is a good idea to <strong>allocate</strong> a little <strong>extra memory</strong>.</p>
-<img src="Memory-Management/grow.png" style="zoom:40%;" />
+<img src="/2020/08/03/Memory-Management/grow.png" style="zoom:40%;">
 
 <h2 id="Managing-Free-Memory"><a href="#Managing-Free-Memory" class="headerlink" title="Managing Free Memory"></a>Managing Free Memory</h2><p>When memory is assigned dynamic, the operating system must manage it. There are two ways to keep track of  memory usage: bitmaps and free lists.</p>
-<img src="Memory-Management/mana.png" style="zoom:40%;" />
+<img src="/2020/08/03/Memory-Management/mana.png" style="zoom:40%;">
 
 <h3 id="Memory-Management-with-Bitmaps"><a href="#Memory-Management-with-Bitmaps" class="headerlink" title="Memory Management with Bitmaps"></a>Memory Management with Bitmaps</h3><p>With a bitmap, memory is divied into allocation units. Corresponding to each allocation unit is a bit in the bitmap, which is 0 if the unit is free and 1 if it is occupied.</p>
 <p>The main <strong>problem</strong> is that when it needs to bring a $k$-unit process into memory, the memory manager must search the bitmap to find $k$ consecutive 0 bits in the map, which is quite slow.</p>
 <h3 id="Memory-Management-with-Linked-Lists"><a href="#Memory-Management-with-Linked-Lists" class="headerlink" title="Memory Management with Linked Lists"></a>Memory Management with Linked Lists</h3><p>Another way is to maintain a linked list of allocated and free memory segements, where a segment either contains a process or is a hole.</p>
 <p>It is more convenient to have the list as a double-linked list, which makes it easier to find the previous entry and see if a merge is possible.</p>
-<img src="Memory-Management/termi.png" style="zoom:40%;" />
+<img src="/2020/08/03/Memory-Management/termi.png" style="zoom:40%;">
 
 <h1 id="Virtual-Memory"><a href="#Virtual-Memory" class="headerlink" title="Virtual Memory"></a>Virtual Memory</h1><p>The problem of programs larger than memory has been around since the beginning of computing, one method is known as <strong>virtual memory</strong>. The basic idea is that:</p>
 <ul>
@@ -341,7 +341,7 @@
 <li><p><strong>MMU (Memory Management Unit)</strong> maps the virtual addresses onto the physical addresses.</p>
 </li>
 </ul>
-<img src="Memory-Management/mmu.png" style="zoom:40%;" />
+<img src="/2020/08/03/Memory-Management/mmu.png" style="zoom:40%;">
 
 <p>A simple mapping example is as follows. </p>
 <ul>
@@ -349,7 +349,7 @@
 <li>The corresponding units in the physical memory are called <strong>frames</strong>.</li>
 <li>The pages and frames are generally the same size.</li>
 </ul>
-<img src="Memory-Management/map.png" style="zoom:40%;" />
+<img src="/2020/08/03/Memory-Management/map.png" style="zoom:40%;">
 
 <h2 id="Page-tables"><a href="#Page-tables" class="headerlink" title="Page tables"></a>Page tables</h2><h3 id="Structure-of-a-page-table-entry"><a href="#Structure-of-a-page-table-entry" class="headerlink" title="Structure of a page table entry"></a>Structure of a page table entry</h3><p>Let us go to the detials of a single page table entry.</p>
 <ul>
@@ -370,7 +370,7 @@
 <li><p><strong>Caching disabled</strong> </p>
 </li>
 </ul>
-<img src="Memory-Management/pte.png" style="zoom:40%;" />
+<img src="/2020/08/03/Memory-Management/pte.png" style="zoom:40%;">
 
 <h2 id="Speeding-up-Paging"><a href="#Speeding-up-Paging" class="headerlink" title="Speeding up Paging"></a>Speeding up Paging</h2><p>In any paging system, two major issues must be faced:</p>
 <ul>
@@ -378,11 +378,11 @@
 <li>If the virtual address space is large, the page table will be large</li>
 </ul>
 <h3 id="TLB-Translation-Lookaside-Buffer"><a href="#TLB-Translation-Lookaside-Buffer" class="headerlink" title="TLB (Translation Lookaside Buffer)"></a>TLB (Translation Lookaside Buffer)</h3><p>The solution for the first issue is to equip computers with a small hardware device for mapping virtual addresses to physical addresses without going through the page table. The device is called <strong>TLB</strong>, which is usually inside the MMU.</p>
-<img src="Memory-Management/tlb.png" style="zoom:40%;" />
+<img src="/2020/08/03/Memory-Management/tlb.png" style="zoom:40%;">
 
-<h3 id="Multi-level-Page-Table"><a href="#Multi-level-Page-Table" class="headerlink" title="Multi-level Page Table"></a>Multi-level Page Table</h3><img src="Memory-Management/mlt.png" style="zoom:40%;" />
+<h3 id="Multi-level-Page-Table"><a href="#Multi-level-Page-Table" class="headerlink" title="Multi-level Page Table"></a>Multi-level Page Table</h3><img src="/2020/08/03/Memory-Management/mlt.png" style="zoom:40%;">
 
-<h3 id="Shared-Pages"><a href="#Shared-Pages" class="headerlink" title="Shared Pages"></a>Shared Pages</h3><img src="Memory-Management/share.png" style="zoom:40%;" />
+<h3 id="Shared-Pages"><a href="#Shared-Pages" class="headerlink" title="Shared Pages"></a>Shared Pages</h3><img src="/2020/08/03/Memory-Management/share.png" style="zoom:40%;">
 
 <p>In UNIX, after the <strong>fork</strong> syscall, the parent and child are required to share both program text and data. It’s implemented as to give each process its own page table and have both of them point to the same set of page. However, all the data pages mapped into both processes as <strong>Read Only</strong>. </p>
 <p>As soon as either a process updates a memory word, a <strong>copy</strong> is then made of the offending page so that each process now has its own private copy, both are now set <strong>Read/ Write</strong>.</p>
@@ -409,13 +409,13 @@
 </ul>
 </li>
 </ul>
-<img src="Memory-Management/chance.png" style="zoom:40%;" />
+<img src="/2020/08/03/Memory-Management/chance.png" style="zoom:40%;">
 
 <h2 id="The-Clock-Page-Replacement-Policy"><a href="#The-Clock-Page-Replacement-Policy" class="headerlink" title="The Clock Page Replacement Policy"></a>The Clock Page Replacement Policy</h2><ul>
 <li>Keep all the page frames on a circular list in the form of a clock</li>
 <li>The hand points to the oldest page</li>
 </ul>
-<img src="Memory-Management/clock.png" style="zoom:40%;" />
+<img src="/2020/08/03/Memory-Management/clock.png" style="zoom:40%;">
 
 <h2 id="The-Not-Recently-Used-NRU-Replacement-Algorithm"><a href="#The-Not-Recently-Used-NRU-Replacement-Algorithm" class="headerlink" title="The Not Recently Used (NRU) Replacement Algorithm"></a>The Not Recently Used (NRU) Replacement Algorithm</h2><ul>
 <li><p>Preidocially, the R bit is cleared</p>
@@ -458,12 +458,12 @@
 <li>the counters are each shifted right 1 bit before the R bit is added in.</li>
 <li>the R bit is added to the leftmost rather than the rightmost bit.</li>
 </ul>
-<img src="Memory-Management/aging.png" style="zoom:40%;" />
+<img src="/2020/08/03/Memory-Management/aging.png" style="zoom:40%;">
 
 <h2 id="The-Working-Set-Page-Replacement-Algorithm"><a href="#The-Working-Set-Page-Replacement-Algorithm" class="headerlink" title="The Working Set Page Replacement Algorithm"></a>The Working Set Page Replacement Algorithm</h2><p>The set of pages that a process is currently using is its <strong>working set</strong>. A program causing page faults every few instructions is said to be <strong>thrashing</strong>.</p>
 <p>In a multiprogramming system, processes are often moved to disk. The question arises of what to do when a process is brought back in again. </p>
 <p>Many paging systems try to keep track of each process’ working set and make sure that it is in memory before letting the process run. This approach is called the <strong>working set model</strong>.  Loading the pages before letting processes run is also called <strong>prepaging</strong>.</p>
-<img src="Memory-Management/work.png" style="zoom:40%;" />
+<img src="/2020/08/03/Memory-Management/work.png" style="zoom:40%;">
 
 <p>The algorithm works as follows:</p>
 <ul>
@@ -475,7 +475,7 @@
 </ul>
 </li>
 </ul>
-<img src="Memory-Management/worka.png" style="zoom:40%;" />
+<img src="/2020/08/03/Memory-Management/worka.png" style="zoom:40%;">
 
 <h2 id="The-WSClock-Page-Replacement-Algorithm"><a href="#The-WSClock-Page-Replacement-Algorithm" class="headerlink" title="The WSClock Page Replacement Algorithm"></a>The WSClock Page Replacement Algorithm</h2><ul>
 <li>The data structure needed is a circular list of page frames, as in the clock algorithm</li>
@@ -490,7 +490,7 @@
 </ul>
 </li>
 </ul>
-<img src="Memory-Management/wsc.png" style="zoom:40%;" />
+<img src="/2020/08/03/Memory-Management/wsc.png" style="zoom:40%;">
 
 <h1 id="DESIGN-ISSUES-FOR-PAGING-SYSTEMS"><a href="#DESIGN-ISSUES-FOR-PAGING-SYSTEMS" class="headerlink" title="DESIGN ISSUES FOR PAGING SYSTEMS"></a>DESIGN ISSUES FOR PAGING SYSTEMS</h1><h2 id="Local-versus-Global-Allocation-Policies"><a href="#Local-versus-Global-Allocation-Policies" class="headerlink" title="Local versus Global Allocation Policies"></a>Local versus Global Allocation Policies</h2><p>If a global algorithm is used, the system must continually decide how many page frames to assign to each process.</p>
 <ul>
@@ -500,10 +500,10 @@
 </ul>
 </li>
 </ul>
-<img src="Memory-Management/pff.png" style="zoom:40%;" />
+<img src="/2020/08/03/Memory-Management/pff.png" style="zoom:40%;">
 
 <p>The dashed line marked A corresponds to a page fault rate that is unacceptably high, so the faulting process is given more page frames to reduce the fault rate. The dashed line marked B corresponds to a page fault rate so low that we can assume the process has too much memory. In this case, page frames may be taken away from it. Thus, PFF tries to keep the paging rate for each process within acceptable bounds.</p>
-<h2 id="Page-Size"><a href="#Page-Size" class="headerlink" title="Page Size"></a>Page Size</h2><h2 id=""><a href="#" class="headerlink" title=""></a></h2><h1 id="Implementation-Issues"><a href="#Implementation-Issues" class="headerlink" title="Implementation Issues"></a>Implementation Issues</h1>
+<h2 id="Page-Size"><a href="#Page-Size" class="headerlink" title="Page Size"></a>Page Size</h2><h2 id><a href="#" class="headerlink" title></a></h2><h1 id="Implementation-Issues"><a href="#Implementation-Issues" class="headerlink" title="Implementation Issues"></a>Implementation Issues</h1>
     </div>
 
     
@@ -601,7 +601,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">29</span>
+          <span class="site-state-item-count">30</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>

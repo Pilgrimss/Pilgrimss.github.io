@@ -27,15 +27,15 @@
 <meta property="og:site_name" content="Blue Flamingo">
 <meta property="og:description" content="This paper presents a novel Mutual Learning to Adapt model(MuLA) for joint human parsing and pose estimation. NuLA predicts dynamic task-specific model parameters by incorporating information from the">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://blueflamingo.tech/2019/04/13/Mutual-Learning-to-Adapt-for-Joint-Human-Parsing-and-Pose-Estimation/Mutual-Learning-to-Adapt-for-Joint-Human-Parsing-and-Pose-Estimation/overview.png">
-<meta property="og:image" content="https://blueflamingo.tech/2019/04/13/Mutual-Learning-to-Adapt-for-Joint-Human-Parsing-and-Pose-Estimation/Mutual-Learning-to-Adapt-for-Joint-Human-Parsing-and-Pose-Estimation/adapter.png">
+<meta property="og:image" content="https://blueflamingo.tech/Mutual-Learning-to-Adapt-for-Joint-Human-Parsing-and-Pose-Estimation/overview.png">
+<meta property="og:image" content="https://blueflamingo.tech/Mutual-Learning-to-Adapt-for-Joint-Human-Parsing-and-Pose-Estimation/adapter.png">
 <meta property="article:published_time" content="2019-04-13T16:49:58.000Z">
 <meta property="article:modified_time" content="2019-04-15T08:06:33.000Z">
 <meta property="article:author" content="Katherine">
 <meta property="article:tag" content="Paper Review">
 <meta property="article:tag" content="Pose Estimation">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://blueflamingo.tech/2019/04/13/Mutual-Learning-to-Adapt-for-Joint-Human-Parsing-and-Pose-Estimation/Mutual-Learning-to-Adapt-for-Joint-Human-Parsing-and-Pose-Estimation/overview.png">
+<meta name="twitter:image" content="https://blueflamingo.tech/Mutual-Learning-to-Adapt-for-Joint-Human-Parsing-and-Pose-Estimation/overview.png">
 
 <link rel="canonical" href="https://blueflamingo.tech/2019/04/13/Mutual-Learning-to-Adapt-for-Joint-Human-Parsing-and-Pose-Estimation/">
 
@@ -261,7 +261,7 @@
 <li>Introduce a <em>learning to adapt</em> mechanism where the guidance inforamtion from one task can be transffered to modify model parameters for the other parallel task.</li>
 <li>Capable of recurrently performing model adaptation and continously refining both models</li>
 </ol>
-<h1 id="Model"><a href="#Model" class="headerlink" title="Model"></a>Model</h1><p><img src="Mutual-Learning-to-Adapt-for-Joint-Human-Parsing-and-Pose-Estimation/overview.png"></p>
+<h1 id="Model"><a href="#Model" class="headerlink" title="Model"></a>Model</h1><p><img src="/Mutual-Learning-to-Adapt-for-Joint-Human-Parsing-and-Pose-Estimation/overview.png"></p>
 <p>Given the notations:</p>
 <blockquote>
 <p>$I\in R^{H\times W\times 3}$: an RGB image with height H and width W</p>
@@ -289,7 +289,7 @@
 <li>VGG16-FCN: a fully convolutional version of VGG network with 16 layers with the total stride reduced from 32 to 8 and the last two max-pooling layers removed</li>
 <li>Hourglass network, with making the output layer aim for semantic part labeling instead of joint confidence regression</li>
 </ol>
-<h2 id="Mutual-adaptation-module"><a href="#Mutual-adaptation-module" class="headerlink" title="Mutual adaptation module"></a>Mutual adaptation module</h2><p><img src="Mutual-Learning-to-Adapt-for-Joint-Human-Parsing-and-Pose-Estimation/adapter.png"></p>
+<h2 id="Mutual-adaptation-module"><a href="#Mutual-adaptation-module" class="headerlink" title="Mutual adaptation module"></a>Mutual adaptation module</h2><p><img src="/Mutual-Learning-to-Adapt-for-Joint-Human-Parsing-and-Pose-Estimation/adapter.png"></p>
 <p>The mutual adaptation module includes two adapters $A_{\psi_\alpha^{(t)}}(\cdot)$ and $A_{\phi_\alpha^{(t)}}(\cdot)$ to predict adaptive parameters $\psi_<em>^{(t)}\in R^{h\times h\times c}$ and $\phi_</em>^{(t)}\in R^{h\times h\times c}$.</p>
 <blockquote>
 <p>$h$: the kernel size</p>
@@ -423,7 +423,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">29</span>
+          <span class="site-state-item-count">30</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>

@@ -27,28 +27,28 @@
 <meta property="og:site_name" content="Blue Flamingo">
 <meta property="og:description" content="This article is a general introduction of the major components and structure of operating systems.">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Introduction/introduction/where.png">
-<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Introduction/Introduction/extened.png">
-<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Introduction/Introduction/hardware.png">
-<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Introduction/Introduction/processor.png">
-<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Introduction/Introduction/memory.png">
-<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Introduction/Introduction/address%20space.png">
-<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Introduction/Introduction/system%20call.png">
-<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Introduction/Introduction/fork.png">
-<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Introduction/Introduction/signal.png">
-<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Introduction/Introduction/steps.png">
-<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Introduction/Introduction/mono.png">
+<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Introduction/where.png">
+<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Introduction/extened.png">
+<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Introduction/hardware.png">
+<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Introduction/processor.png">
+<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Introduction/memory.png">
+<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Introduction/address%20space.png">
+<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Introduction/system%20call.png">
+<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Introduction/fork.png">
+<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Introduction/signal.png">
+<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Introduction/steps.png">
+<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Introduction/mono.png">
 <meta property="og:image" content="https://blueflamingo.tech/Users/katherine/Pilgrimss.github.io/source/_posts/Introduction/layer.png">
-<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Introduction/Introduction/minix.png">
-<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Introduction/Introduction/client.png">
-<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Introduction/Introduction/vm370.png">
-<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Introduction/Introduction/hypervisor.png">
+<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Introduction/minix.png">
+<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Introduction/client.png">
+<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Introduction/vm370.png">
+<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Introduction/hypervisor.png">
 <meta property="article:published_time" content="2020-08-03T19:06:26.000Z">
-<meta property="article:modified_time" content="2020-12-11T02:10:04.762Z">
+<meta property="article:modified_time" content="2020-12-11T06:06:29.611Z">
 <meta property="article:author" content="Katherine">
 <meta property="article:tag" content="Operating Systems">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://blueflamingo.tech/2020/08/03/Introduction/introduction/where.png">
+<meta name="twitter:image" content="https://blueflamingo.tech/2020/08/03/Introduction/where.png">
 
 <link rel="canonical" href="https://blueflamingo.tech/2020/08/03/Introduction/">
 
@@ -238,7 +238,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-12-10 21:10:04" itemprop="dateModified" datetime="2020-12-10T21:10:04-05:00">2020-12-10</time>
+                <time title="Modified: 2020-12-11 01:06:29" itemprop="dateModified" datetime="2020-12-11T01:06:29-05:00">2020-12-11</time>
               </span>
 
           
@@ -267,11 +267,11 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <img src="introduction/where.png" alt="where" style="zoom:50%;" />
+        <img src="/2020/08/03/Introduction/where.png" alt="where" style="zoom:50%;">
 
 <p>The Operating system runs in <strong>kernel mode.</strong> In this mode, it has complete access to all the hardware and can execute all instructions. All the other softwares runs in <strong>user mode</strong>.</p>
 <h2 id="What-is-an-operating-system"><a href="#What-is-an-operating-system" class="headerlink" title="What is an operating system?"></a>What is an operating system?</h2><p>From a top-down view, the operating system is an extended machine which hides the ugly hardware and <strong>provides abstractions</strong> to applications.</p>
-<img src="Introduction/extened.png" alt="extened" style="zoom:50%;" />
+<img src="/2020/08/03/Introduction/extened.png" alt="extened" style="zoom:50%;">
 
 <p>In the bottom-up view, the opearting system works as a <strong>resource manager</strong>.</p>
 <ul>
@@ -296,7 +296,7 @@
 <li>The secondary <strong>boot loader</strong> is read from that parition</li>
 <li>The loader reads in the <strong>opearting system</strong> from the active partition and starts it</li>
 </ul>
-<h2 id="Computer-hardware"><a href="#Computer-hardware" class="headerlink" title="Computer hardware"></a>Computer hardware</h2><img src="Introduction/hardware.png" style="zoom:50%;" />
+<h2 id="Computer-hardware"><a href="#Computer-hardware" class="headerlink" title="Computer hardware"></a>Computer hardware</h2><img src="/2020/08/03/Introduction/hardware.png" style="zoom:50%;">
 
 <p>Conceptually, CPU and hadrwares are all connected by a system bus and communicate with each otehr over it. But actually, it has a more complicated structure, invovling multiple buses.</p>
 <h3 id="Processors"><a href="#Processors" class="headerlink" title="Processors"></a>Processors</h3><p>All CPUs contains some <strong>registers</strong> inside:</p>
@@ -311,10 +311,10 @@
 </ul>
 <p>The basic cycle of CPU is to fetch, decode, execute instruction.</p>
 <p>A <strong>pipeline</strong> CPU have separate fetch, decode, execute units, a <strong>superscalar</strong> CPU have multiple units.</p>
-<img src="Introduction/processor.png" style="zoom:50%;" />
+<img src="/2020/08/03/Introduction/processor.png" style="zoom:50%;">
 
 <h3 id="Memory"><a href="#Memory" class="headerlink" title="Memory"></a>Memory</h3><p>The memory system is constructed as a hierarchy of layers.</p>
-<img src="Introduction/memory.png" style="zoom:50%;" />
+<img src="/2020/08/03/Introduction/memory.png" style="zoom:50%;">
 
 <p>The <strong>registers</strong> internal to CPU are as fast as the CPU.</p>
 <p> <strong>Main Memory</strong> is divided up into cache lines, and the most heavily used cache lines are kept in high-spped <strong>cache</strong>.</p>
@@ -325,7 +325,7 @@
 <li><p><strong>Address space</strong>: a list of memory locations which the process can read and write</p>
 <ul>
 <li><p>Defines where several segments are located</p>
-<img src="Introduction/address space.png" style="zoom:50%;" />
+<img src="/2020/08/03/Introduction/address space.png" style="zoom:50%;">
 </li>
 <li><p>Defines protection of those sections: ReadOnly, ReadWrite, Execute</p>
 </li>
@@ -341,14 +341,14 @@
 <li>Execption: triggered by fault</li>
 </ul>
 <p>The <strong>interrupt handler</strong> (_entry in the kernel) identifies them and then jumps to their respective handlers.</p>
-<h3 id="System-call-examples"><a href="#System-call-examples" class="headerlink" title="System call examples"></a>System call examples</h3><img src="Introduction/system call.png" style="zoom:40%;" />
+<h3 id="System-call-examples"><a href="#System-call-examples" class="headerlink" title="System call examples"></a>System call examples</h3><img src="/2020/08/03/Introduction/system call.png" style="zoom:40%;">
 
 <p><strong>Fork</strong> creates an exact duplicate of the original process. After the fork, the parent and child process go their separate ways. As shown in the follwing example, the fork call returns a value, which is zero in the child and equal to the child’s <strong>PID (Process Identifier)</strong> in the parent. </p>
-<img src="Introduction/fork.png" style="zoom:40%;" />
+<img src="/2020/08/03/Introduction/fork.png" style="zoom:40%;">
 
 <p><strong>Clone</strong> also creates a new process. One difference is that it allows the child process to share parts of its execution context with the parent process, such as the memory space. </p>
 <p>The kernel uses <strong>signals</strong> to call into a process. There are a few examples of signals.</p>
-<img src="Introduction/signal.png" style="zoom:60%;" />
+<img src="/2020/08/03/Introduction/signal.png" style="zoom:60%;">
 
 <p>When a signal is delivered, </p>
 <h3 id="How-are-syscalls-implemented-user-amp-kernel"><a href="#How-are-syscalls-implemented-user-amp-kernel" class="headerlink" title="How are syscalls implemented(user &amp; kernel)"></a>How are syscalls implemented(user &amp; kernel)</h3><ul>
@@ -363,7 +363,7 @@
 <li>call to responding function in syscall table</li>
 <li>switch back to user stack and return from kernel mode</li>
 </ul>
-<h3 id="Steps-in-making-a-system-call"><a href="#Steps-in-making-a-system-call" class="headerlink" title="Steps in making a system call"></a>Steps in making a system call</h3><img src="Introduction/steps.png" style="zoom: 40%;" />
+<h3 id="Steps-in-making-a-system-call"><a href="#Steps-in-making-a-system-call" class="headerlink" title="Steps in making a system call"></a>Steps in making a system call</h3><img src="/2020/08/03/Introduction/steps.png" style="zoom: 40%;">
 
 <h2 id="Operating-system-structure"><a href="#Operating-system-structure" class="headerlink" title="Operating system structure"></a>Operating system structure</h2><h3 id="Monolithic-systems"><a href="#Monolithic-systems" class="headerlink" title="Monolithic systems"></a>Monolithic systems</h3><p>In the monolithic approach, the entire opearting system runs as a single program in kernel mode. The operating system is written as a collection of procedures linked together. This organization suggests a basic structure for the operating system:</p>
 <ul>
@@ -374,17 +374,17 @@
 <li><p>A set of <strong>utility procedures</strong> that help the service procedure</p>
 </li>
 </ul>
-<img src="Introduction/mono.png" style="zoom:40%;" />
+<img src="/2020/08/03/Introduction/mono.png" style="zoom:40%;">
 
 <h3 id="Layered-Systems"><a href="#Layered-Systems" class="headerlink" title="Layered Systems"></a>Layered Systems</h3><p>A generalization is to organize the operating systems as a hierarchy of layers, each one constructed upon the one below it.</p>
-<img src="/Users/katherine/Pilgrimss.github.io/source/_posts/Introduction/layer.png" style="zoom:40%;" />
+<img src="/Users/katherine/Pilgrimss.github.io/source/_posts/Introduction/layer.png" style="zoom:40%;">
 
 <h3 id="Microkernels"><a href="#Microkernels" class="headerlink" title="Microkernels"></a>Microkernels</h3><p>Tranditionally, with the layered approach, all the layers went in the kernel. However, a strong case can be made for putting as little as possible in the kernel mode since bugs in kernel can bring down the system instantly. </p>
 <p>The microkernel design split the operating system up into small, well defined modules, only one of which - the <strong>microkernel</strong> - runs in kernel mode. Outside the kernel, the system is structed as three layers of processes all running in user mode.</p>
-<img src="Introduction/minix.png" style="zoom:40%;" />
+<img src="/2020/08/03/Introduction/minix.png" style="zoom:40%;">
 
 <h3 id="Client-Sever-Model"><a href="#Client-Sever-Model" class="headerlink" title="Client-Sever Model"></a>Client-Sever Model</h3><p>The client-server model is a slight variation of the microkernel idea, which distinguish two classes of processes, the <strong>server</strong>, which provides some services, and the <strong>clients</strong>, which use these services. Communication between servers and clients is via message passing.</p>
-<img src="Introduction/client.png" alt="client" style="zoom:40%;" />
+<img src="/2020/08/03/Introduction/client.png" alt="client" style="zoom:40%;">
 
 <h3 id="Virtual-Machine"><a href="#Virtual-Machine" class="headerlink" title="Virtual Machine"></a>Virtual Machine</h3><h4 id="VM-370"><a href="#VM-370" class="headerlink" title="VM/370"></a>VM/370</h4><p>The essence of VM/370 is to completely separate the two functions of  the timesharing system:</p>
 <ul>
@@ -393,11 +393,11 @@
 </ul>
 <p>The <strong>virtual machine monitor</strong> runs on the bare hardware, does multiprogramming, providing several virtual machines to the next layer up.</p>
 <p>These virtual machines are <strong>exact copies</strong> of the bare hardware, so each one can run any opearting system that will run directly on the bare hardware.</p>
-<img src="Introduction/vm370.png" alt="vm370" style="zoom:40%;" />
+<img src="/2020/08/03/Introduction/vm370.png" alt="vm370" style="zoom:40%;">
 
 <h4 id="Type-1-amp-2-hypervisor"><a href="#Type-1-amp-2-hypervisor" class="headerlink" title="Type 1&amp;2 hypervisor"></a>Type 1&amp;2 hypervisor</h4><p>In type 1 hypervisor, privileged instructions are trapped to the virtual machine monitor, and emulated in software.</p>
 <p>Type 2 hypervisor makes user of a host opearting system </p>
-<img src="Introduction/hypervisor.png" alt="hypervisor" style="zoom:40%;" />
+<img src="/2020/08/03/Introduction/hypervisor.png" alt="hypervisor" style="zoom:40%;">
 
 
     </div>
@@ -497,7 +497,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">29</span>
+          <span class="site-state-item-count">30</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>

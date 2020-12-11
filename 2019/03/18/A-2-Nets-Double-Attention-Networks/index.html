@@ -27,14 +27,14 @@
 <meta property="og:site_name" content="Blue Flamingo">
 <meta property="og:description" content="This paper propose the &#39;double attention block&#39; to aggregate and propagate informative global features from the entire spatio-temporal space of input images&#x2F;videos, enabling subsequent convolutional l">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://blueflamingo.tech/2019/03/18/A-2-Nets-Double-Attention-Networks/A-2-Nets-Double-Attention-Networks/model.png">
-<meta property="og:image" content="https://blueflamingo.tech/2019/03/18/A-2-Nets-Double-Attention-Networks/A-2-Nets-Double-Attention-Networks/graph.png">
+<meta property="og:image" content="https://blueflamingo.tech/A-2-Nets-Double-Attention-Networks/model.png">
+<meta property="og:image" content="https://blueflamingo.tech/A-2-Nets-Double-Attention-Networks/graph.png">
 <meta property="article:published_time" content="2019-03-18T18:42:57.000Z">
 <meta property="article:modified_time" content="2019-04-17T12:20:49.000Z">
 <meta property="article:author" content="Katherine">
 <meta property="article:tag" content="Paper Review">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://blueflamingo.tech/2019/03/18/A-2-Nets-Double-Attention-Networks/A-2-Nets-Double-Attention-Networks/model.png">
+<meta name="twitter:image" content="https://blueflamingo.tech/A-2-Nets-Double-Attention-Networks/model.png">
 
 <link rel="canonical" href="https://blueflamingo.tech/2019/03/18/A-2-Nets-Double-Attention-Networks/">
 
@@ -279,7 +279,7 @@
 <p>$G_{gather}$: aggregate features from the entire input space</p>
 <p>$F_{distr}$: distribute the gathered information to each location i, conditioned on the local feature $v_i ​$</p>
 </blockquote>
-<p><img src="A-2-Nets-Double-Attention-Networks/model.png"></p>
+<p><img src="/A-2-Nets-Double-Attention-Networks/model.png"></p>
 <h2 id="The-First-Attention-Step-Feature-Gathering"><a href="#The-First-Attention-Step-Feature-Gathering" class="headerlink" title="The First Attention Step: Feature Gathering"></a>The First Attention Step: Feature Gathering</h2><p><strong>Bilinear pooling</strong></p>
 <p>Bilinear pooling can capture second-order features and preserve complex relations better, compared with the conventional average and max pooling.</p>
 <p>Given two feature maps $A=[a_1, \cdots, a_{dhw}]\in R^{m \times dhw}, B=[b_1, \cdots, b_{dhw}]\in R^{n \times dhw}$,   the output $G=[g_1, \dots, g_n]\in R^{m\times n}$ of bilinear pooling within $A$ and $B$ is defined as:<br>$$<br>G_{bilinear}(A,B)= AB^T=\sum_{\forall i}a_ib_i^T \tag{2} \label{eq2}<br>$$</p>
@@ -297,7 +297,7 @@
 <blockquote>
 <p>$V= softmax(\rho(X; W_\rho))$, where $W_\rho$ contains parameter for this convolutional layer</p>
 </blockquote>
-<h2 id="Double-Attention-Block"><a href="#Double-Attention-Block" class="headerlink" title="Double Attention Block"></a>Double Attention Block</h2><p><img src="A-2-Nets-Double-Attention-Networks/graph.png"></p>
+<h2 id="Double-Attention-Block"><a href="#Double-Attention-Block" class="headerlink" title="Double Attention Block"></a>Double Attention Block</h2><p><img src="/A-2-Nets-Double-Attention-Networks/graph.png"></p>
 <p>The overall architecture can be formulated as:<br>$$<br>\begin{split}<br>Z &amp;= F_{distr}(G_{gather}(X),V) \<br>&amp;= G_{gather}(X)softmax(\rho(X,W_\rho))\<br>&amp;=[\phi(X;W_\phi)softmax(\theta(X,W_\theta))^T]softmax(\rho(X, W_\rho))<br>\end{split}<br>$$</p>
 
     </div>
@@ -394,7 +394,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">29</span>
+          <span class="site-state-item-count">30</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>

@@ -27,15 +27,15 @@
 <meta property="og:site_name" content="Blue Flamingo">
 <meta property="og:description" content="This paper designs a Contextual Refinement Unit(CRU) to implement a new Hierarchical Contextual Refinment Network(HCRN) to predict positions of joints from easy to difficult.">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://blueflamingo.tech/2019/03/29/Hierarchical-Contextual-Refinement-Networks-for-Human-Pose-Estimation/Hierarchical-Contextual-Refinement-Networks-for-Human-Pose-Estimation/model.png">
-<meta property="og:image" content="https://blueflamingo.tech/2019/03/29/Hierarchical-Contextual-Refinement-Networks-for-Human-Pose-Estimation/Hierarchical-Contextual-Refinement-Networks-for-Human-Pose-Estimation/cru.png">
+<meta property="og:image" content="https://blueflamingo.tech/Hierarchical-Contextual-Refinement-Networks-for-Human-Pose-Estimation/model.png">
+<meta property="og:image" content="https://blueflamingo.tech/Hierarchical-Contextual-Refinement-Networks-for-Human-Pose-Estimation/cru.png">
 <meta property="article:published_time" content="2019-03-29T18:44:44.000Z">
 <meta property="article:modified_time" content="2019-04-17T13:10:56.000Z">
 <meta property="article:author" content="Katherine">
 <meta property="article:tag" content="Paper Review">
 <meta property="article:tag" content="Pose Estimation">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://blueflamingo.tech/2019/03/29/Hierarchical-Contextual-Refinement-Networks-for-Human-Pose-Estimation/Hierarchical-Contextual-Refinement-Networks-for-Human-Pose-Estimation/model.png">
+<meta name="twitter:image" content="https://blueflamingo.tech/Hierarchical-Contextual-Refinement-Networks-for-Human-Pose-Estimation/model.png">
 
 <link rel="canonical" href="https://blueflamingo.tech/2019/03/29/Hierarchical-Contextual-Refinement-Networks-for-Human-Pose-Estimation/">
 
@@ -266,7 +266,7 @@
 <li>left/right wrist, left/right ankle</li>
 </ol>
 <h1 id="Model"><a href="#Model" class="headerlink" title="Model"></a>Model</h1><p>The goal is to estimate the positions $\mathcal{P}={P_i}_{i=1}^N​$ of $N​$ joints $\mathcal{J}={J_i}_{i=1}^N​$ for given human body image $I​$.</p>
-<p><img src="Hierarchical-Contextual-Refinement-Networks-for-Human-Pose-Estimation/model.png"></p>
+<p><img src="/Hierarchical-Contextual-Refinement-Networks-for-Human-Pose-Estimation/model.png"></p>
 <h2 id="Front-end-CNN"><a href="#Front-end-CNN" class="headerlink" title="Front-end CNN"></a>Front-end CNN</h2><p>This paper extracts the feature $F\in R^{c\times h\times w}$ from “fc7” of VGG16, “res5c” of Res101, and the highest-level features of the last stage of CPM as well as HG,  as input to HCRN, respectively.</p>
 <blockquote>
 <p>c: the dimension of discriminative representation</p>
@@ -276,7 +276,7 @@
 <p>CRUs are organized into a complexity-aware hierarchy of human joints, and HCRN applies CRUs layer-by-layer to generate heatmaps for all joints.</p>
 <p>The position $P_i$ for joint $J_i$ is localized by taking the location with the maximum confidence score on heatmap $H_i$.   </p>
 <h3 id="Contextual-Refinement-Unit-CRU"><a href="#Contextual-Refinement-Unit-CRU" class="headerlink" title="Contextual Refinement Unit (CRU)"></a>Contextual Refinement Unit (CRU)</h3><p>CRU estimates heatmap $H_i^l​$ for joint $J_i^l​$ in the layer $l​$ according to the deep representation $F​$ and the heatmap $H_{i*}^{l-1}​$ of the corresponding joint $J_{i*}^{l-1}​$ in the layer $(l-1)​$.</p>
-<p><img src="Hierarchical-Contextual-Refinement-Networks-for-Human-Pose-Estimation/cru.png"></p>
+<p><img src="/Hierarchical-Contextual-Refinement-Networks-for-Human-Pose-Estimation/cru.png"></p>
 <p>There are four steps of calculations.</p>
 <h4 id="Step-1-Heatmap-Initialization"><a href="#Step-1-Heatmap-Initialization" class="headerlink" title="Step 1: Heatmap Initialization"></a>Step 1: Heatmap Initialization</h4><p>The first step is to estimate initial heatmap $O_l​$ for a joint $J^l​$ in layer $l​$<br>$$<br>O^l=\sigma(W_O^l * F + B_O^l)<br>$$</p>
 <blockquote>
@@ -407,7 +407,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">29</span>
+          <span class="site-state-item-count">30</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>

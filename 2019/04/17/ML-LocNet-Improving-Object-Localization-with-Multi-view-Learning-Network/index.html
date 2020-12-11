@@ -27,16 +27,16 @@
 <meta property="og:site_name" content="Blue Flamingo">
 <meta property="og:description" content="This paper proposes a Multi-view Learning Localization Network (ML-LocNet) by incorporating multi-view learning into a two-phase Weakly Supervised Object Localization (WSOL) model.">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://blueflamingo.tech/2019/04/17/ML-LocNet-Improving-Object-Localization-with-Multi-view-Learning-Network/ML-LocNet-Improving-Object-Localization-with-Multi-view-Learning-Network/p1.png">
-<meta property="og:image" content="https://blueflamingo.tech/2019/04/17/ML-LocNet-Improving-Object-Localization-with-Multi-view-Learning-Network/ML-LocNet-Improving-Object-Localization-with-Multi-view-Learning-Network/p2.png">
-<meta property="og:image" content="https://blueflamingo.tech/2019/04/17/ML-LocNet-Improving-Object-Localization-with-Multi-view-Learning-Network/ML-LocNet-Improving-Object-Localization-with-Multi-view-Learning-Network/algorithm.png">
+<meta property="og:image" content="https://blueflamingo.tech/ML-LocNet-Improving-Object-Localization-with-Multi-view-Learning-Network/p1.png">
+<meta property="og:image" content="https://blueflamingo.tech/ML-LocNet-Improving-Object-Localization-with-Multi-view-Learning-Network/p2.png">
+<meta property="og:image" content="https://blueflamingo.tech/ML-LocNet-Improving-Object-Localization-with-Multi-view-Learning-Network/algorithm.png">
 <meta property="article:published_time" content="2019-04-17T18:25:31.000Z">
 <meta property="article:modified_time" content="2019-04-17T08:22:26.000Z">
 <meta property="article:author" content="Katherine">
 <meta property="article:tag" content="Paper Review">
 <meta property="article:tag" content="Object Detection">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://blueflamingo.tech/2019/04/17/ML-LocNet-Improving-Object-Localization-with-Multi-view-Learning-Network/ML-LocNet-Improving-Object-Localization-with-Multi-view-Learning-Network/p1.png">
+<meta name="twitter:image" content="https://blueflamingo.tech/ML-LocNet-Improving-Object-Localization-with-Multi-view-Learning-Network/p1.png">
 
 <link rel="canonical" href="https://blueflamingo.tech/2019/04/17/ML-LocNet-Improving-Object-Localization-with-Multi-view-Learning-Network/">
 
@@ -258,7 +258,7 @@
 <li>Utilize a multi-view co-training algorithm to refine the localization model with the mined instances</li>
 </ol>
 <h2 id="Phase-One-Multi-view-Representation-Learning"><a href="#Phase-One-Multi-view-Representation-Learning" class="headerlink" title="Phase One: Multi-view Representation Learning"></a>Phase One: Multi-view Representation Learning</h2><p>In the first phase, the network aggreates region scores for computing classification loss. </p>
-<p><img src="ML-LocNet-Improving-Object-Localization-with-Multi-view-Learning-Network/p1.png"></p>
+<p><img src="/ML-LocNet-Improving-Object-Localization-with-Multi-view-Learning-Network/p1.png"></p>
 <p><strong>Region Dropout</strong></p>
 <p>Since high-scored regions tend to focus on objet parts instead of the whole object, the network would quickly converge to local minima due to overfitting.</p>
 <p>To solve this problem, this paper performs a random dropout on region proposals $\mathcal R$ (obtained by Edge boxes in this paper), and only pass part of regions $\mathcal R’​$ to the ROI pooling layers.</p>
@@ -279,7 +279,7 @@
 <p><strong>Loss function</strong></p>
 <p>The network is trained y back-propagating a image-level binary log loss:<br>$$<br>L_{cls}(x,y) = \sum_{i=1}^C \log(y_i(\phi^i(x, w_{cls})-1/2)+1/2)<br>$$</p>
 <h2 id="Phase-Two-Mutil-view-Co-training"><a href="#Phase-Two-Mutil-view-Co-training" class="headerlink" title="Phase Two: Mutil-view Co-training"></a>Phase Two: Mutil-view Co-training</h2><p>The second phase introduces a multi-view instance refinement procedure, which trains the network with instance-level loss and refines the network via a multi-view co-training strategy.</p>
-<p><img src="ML-LocNet-Improving-Object-Localization-with-Multi-view-Learning-Network/p2.png"></p>
+<p><img src="/ML-LocNet-Improving-Object-Localization-with-Multi-view-Learning-Network/p2.png"></p>
 <p><strong>Initial Object Instances</strong></p>
 <p>In order to relieve the issue that high scored regions tend to focus on object parts rather than the whole object, this paper consider the top scored regions as soft vectors. The object heatmap $H^c$ for class c which shows the confidence that pixel $p$ lies in an object is computed as:<br>$$<br>H^c(p)=\sum_r x_{cr}D_r(p)/Z \tag{7}<br>$$</p>
 <blockquote>
@@ -299,7 +299,7 @@
 <p>$\phi(x_c^o, w_{loc}^k)$: the detection score returned by network $M^k$, where $w_{loc}^k$ is the network parameter of $M_k$</p>
 </blockquote>
 <p>The whole algorithm is summarized as:</p>
-<p><img src="ML-LocNet-Improving-Object-Localization-with-Multi-view-Learning-Network/algorithm.png"></p>
+<p><img src="/ML-LocNet-Improving-Object-Localization-with-Multi-view-Learning-Network/algorithm.png"></p>
 
     </div>
 
@@ -399,7 +399,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">29</span>
+          <span class="site-state-item-count">30</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>

@@ -27,16 +27,16 @@
 <meta property="og:site_name" content="Blue Flamingo">
 <meta property="og:description" content="When to schedule? How to choose scheduling algorithms to satisfy different systems?">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Scheduling/Scheduling/burst.png">
-<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Scheduling/Scheduling/goal.png">
-<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Scheduling/Scheduling/rr.png">
-<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Scheduling/Scheduling/prio.png">
+<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Scheduling/burst.png">
+<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Scheduling/goal.png">
+<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Scheduling/rr.png">
+<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Scheduling/prio.png">
 <meta property="article:published_time" content="2020-08-03T19:06:55.000Z">
 <meta property="article:modified_time" content="2020-12-11T02:09:05.329Z">
 <meta property="article:author" content="Katherine">
 <meta property="article:tag" content="Operating System">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://blueflamingo.tech/2020/08/03/Scheduling/Scheduling/burst.png">
+<meta name="twitter:image" content="https://blueflamingo.tech/2020/08/03/Scheduling/burst.png">
 
 <link rel="canonical" href="https://blueflamingo.tech/2020/08/03/Scheduling/">
 
@@ -257,7 +257,7 @@
       
         <h1 id="Introduction-to-scheduling"><a href="#Introduction-to-scheduling" class="headerlink" title="Introduction to scheduling"></a>Introduction to scheduling</h1><p>If only one CPU is available, while two or more processes are simultaneously in the Ready state, the <strong>scheduler</strong> has to determine which process to run next. </p>
 <h2 id="CPU-vs-I-O-Bound"><a href="#CPU-vs-I-O-Bound" class="headerlink" title="CPU vs I/O Bound"></a>CPU vs I/O Bound</h2><p>Some process spend most of their time computing, while others spend most of that waiting for I/O. The former are called <strong>CPU-bound</strong>; the latter are called <strong>IO/bound</strong>.</p>
-<img src="Scheduling/burst.png" style="zoom:40%;" />
+<img src="/2020/08/03/Scheduling/burst.png" style="zoom:40%;">
 
 <h2 id="When-to-Schedule"><a href="#When-to-Schedule" class="headerlink" title="When to Schedule"></a>When to Schedule</h2><p>A key issue related to scheduling is when to make scheduling decisions. There are a variety of situations in which scheduling is needed:</p>
 <ul>
@@ -287,7 +287,7 @@
 <li>Real time</li>
 </ul>
 <p>There are some goals when designing a scheduling algorithm.</p>
-<img src="Scheduling/goal.png" style="zoom:40%;" />
+<img src="/2020/08/03/Scheduling/goal.png" style="zoom:40%;">
 
 <h1 id="Scheduling-in-Batch-Systems"><a href="#Scheduling-in-Batch-Systems" class="headerlink" title="Scheduling in Batch Systems"></a>Scheduling in Batch Systems</h1><h2 id="First-Come-First-Served"><a href="#First-Come-First-Served" class="headerlink" title="First-Come, First Served"></a>First-Come, First Served</h2><p>With this nonpreemptive algorithm, process are assigned the CPU in order they request it.</p>
 <ul>
@@ -307,7 +307,7 @@
 <li>If the process is still running at the end of the quantum, the CPU is preempted and given to another process.</li>
 <li>The scheduler need to maintain a list of runnable processes.</li>
 </ul>
-<img src="Scheduling/rr.png" style="zoom:40%;" />
+<img src="/2020/08/03/Scheduling/rr.png" style="zoom:40%;">
 
 <p>An interesting issue is the length of the quantum. Setting the quantum too short causes too many context switches and lowers the CPU efficiency, while setting it too long may cause poor response to short interactive requests. If the quantum is set longer than the mean CPU burst, preemption will not often happen.</p>
 <h2 id="Priority-Scheduling"><a href="#Priority-Scheduling" class="headerlink" title="Priority Scheduling"></a>Priority Scheduling</h2><p>Each process is assigned a priority, and the runnable process with the highest priority is allowed to run.</p>
@@ -324,7 +324,7 @@
 <li>When high-priority classes are empty, run lower class round-robin, and so on.</li>
 <li>If the priorities are not adjusted occasionally, lower-priority classes may starve to death.</li>
 </ul>
-<img src="Scheduling/prio.png" style="zoom:40%;" />
+<img src="/2020/08/03/Scheduling/prio.png" style="zoom:40%;">
 
 <h3 id="Multi-Level-Feedback-Queues"><a href="#Multi-Level-Feedback-Queues" class="headerlink" title="Multi-Level Feedback Queues"></a>Multi-Level Feedback Queues</h3><p>Each process is assgined two priority:</p>
 <ul>
@@ -452,7 +452,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">29</span>
+          <span class="site-state-item-count">30</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
