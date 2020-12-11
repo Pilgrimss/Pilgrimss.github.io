@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"blueflamingo.tech","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="This article is a general introduction of the major components and structure of operating systems.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Introduction to operating systems">
+<meta property="og:url" content="https://blueflamingo.tech/2020/08/03/Introduction/index.html">
+<meta property="og:site_name" content="Blue Flamingo">
+<meta property="og:description" content="This article is a general introduction of the major components and structure of operating systems.">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Introduction/introduction/where.png">
+<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Introduction/Introduction/extened.png">
+<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Introduction/Introduction/hardware.png">
+<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Introduction/Introduction/processor.png">
+<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Introduction/Introduction/memory.png">
+<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Introduction/Introduction/address%20space.png">
+<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Introduction/Introduction/system%20call.png">
+<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Introduction/Introduction/fork.png">
+<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Introduction/Introduction/signal.png">
+<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Introduction/Introduction/steps.png">
+<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Introduction/Introduction/mono.png">
+<meta property="og:image" content="https://blueflamingo.tech/Users/katherine/Pilgrimss.github.io/source/_posts/Introduction/layer.png">
+<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Introduction/Introduction/minix.png">
+<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Introduction/Introduction/client.png">
+<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Introduction/Introduction/vm370.png">
+<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Introduction/Introduction/hypervisor.png">
+<meta property="article:published_time" content="2020-08-03T19:06:26.000Z">
+<meta property="article:modified_time" content="2020-12-11T02:10:04.762Z">
+<meta property="article:author" content="Katherine">
+<meta property="article:tag" content="Operating Systems">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blueflamingo.tech/2020/08/03/Introduction/introduction/where.png">
+
+<link rel="canonical" href="https://blueflamingo.tech/2020/08/03/Introduction/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>Introduction to operating systems | Blue Flamingo</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Blue Flamingo</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+  <a href="https://github.com/Pilgrimss" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueflamingo.tech/2020/08/03/Introduction/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Katherine">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Blue Flamingo">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Introduction to operating systems
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-08-03 15:06:26" itemprop="dateCreated datePublished" datetime="2020-08-03T15:06:26-04:00">2020-08-03</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-12-10 21:10:04" itemprop="dateModified" datetime="2020-12-10T21:10:04-05:00">2020-12-10</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/2020/08/03/Introduction/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2020/08/03/Introduction/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+            <div class="post-description">This article is a general introduction of the major components and structure of operating systems.</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <img src="introduction/where.png" alt="where" style="zoom:50%;" />
+
+<p>The Operating system runs in <strong>kernel mode.</strong> In this mode, it has complete access to all the hardware and can execute all instructions. All the other softwares runs in <strong>user mode</strong>.</p>
+<h2 id="What-is-an-operating-system"><a href="#What-is-an-operating-system" class="headerlink" title="What is an operating system?"></a>What is an operating system?</h2><p>From a top-down view, the operating system is an extended machine which hides the ugly hardware and <strong>provides abstractions</strong> to applications.</p>
+<img src="Introduction/extened.png" alt="extened" style="zoom:50%;" />
+
+<p>In the bottom-up view, the opearting system works as a <strong>resource manager</strong>.</p>
+<ul>
+<li>Allocation: allocate finite resources to various programs</li>
+<li>Protection: prevent users from interfering with one another</li>
+<li>Reclamation: reclaim resources</li>
+<li>Virtualization: illusion of infinite private resources</li>
+</ul>
+<p>The operating system multiplexs (shares) resources in two different ways: in time and in space. </p>
+<ul>
+<li>When a resource is time multiplexed, different users take turns using it, eg: cpu, printer.</li>
+<li>When a resource is space multiplexed, each user gets part of it, eg: main memory.</li>
+</ul>
+<h3 id="Booting-the-computer"><a href="#Booting-the-computer" class="headerlink" title="Booting the computer"></a>Booting the computer</h3><p>When the computer is booted:</p>
+<ul>
+<li><strong>BIOS</strong> (Basic Input Output System) starts<ul>
+<li>checks how much RAM is installed and whether basic devices are responding correctly</li>
+<li>determines the boot device</li>
+</ul>
+</li>
+<li>The first sector from the <strong>boot device</strong> is read into memory and executed to determine the active partition </li>
+<li>The secondary <strong>boot loader</strong> is read from that parition</li>
+<li>The loader reads in the <strong>opearting system</strong> from the active partition and starts it</li>
+</ul>
+<h2 id="Computer-hardware"><a href="#Computer-hardware" class="headerlink" title="Computer hardware"></a>Computer hardware</h2><img src="Introduction/hardware.png" style="zoom:50%;" />
+
+<p>Conceptually, CPU and hadrwares are all connected by a system bus and communicate with each otehr over it. But actually, it has a more complicated structure, invovling multiple buses.</p>
+<h3 id="Processors"><a href="#Processors" class="headerlink" title="Processors"></a>Processors</h3><p>All CPUs contains some <strong>registers</strong> inside:</p>
+<ul>
+<li>General registers: hold key variables and temporary results</li>
+<li>Special registers<ul>
+<li>Program Counter: contains the memory address of the next instuction</li>
+<li>Stack pointer: points to the top of the current stack in memory</li>
+<li>PSW(Program Status Word): contains the condition code bits, the cpu priority, the mode (user/kernel) various control bits.</li>
+</ul>
+</li>
+</ul>
+<p>The basic cycle of CPU is to fetch, decode, execute instruction.</p>
+<p>A <strong>pipeline</strong> CPU have separate fetch, decode, execute units, a <strong>superscalar</strong> CPU have multiple units.</p>
+<img src="Introduction/processor.png" style="zoom:50%;" />
+
+<h3 id="Memory"><a href="#Memory" class="headerlink" title="Memory"></a>Memory</h3><p>The memory system is constructed as a hierarchy of layers.</p>
+<img src="Introduction/memory.png" style="zoom:50%;" />
+
+<p>The <strong>registers</strong> internal to CPU are as fast as the CPU.</p>
+<p> <strong>Main Memory</strong> is divided up into cache lines, and the most heavily used cache lines are kept in high-spped <strong>cache</strong>.</p>
+<p>When the program needs to read a memory word, the cache checks if the line is in the cache. If so, it’s called a <strong>cache hit</strong>, and no memory access is needed. Otherwise, it’s called <strong>cache miss</strong>, and have to go to the memory.</p>
+<p>Data can be in <strong>read</strong> state in multiple caches but only in one cache when in <strong>write</strong> state.</p>
+<h2 id="OS-Major-Components"><a href="#OS-Major-Components" class="headerlink" title="OS Major Components"></a>OS Major Components</h2><h3 id="Process-and-Thread-Management"><a href="#Process-and-Thread-Management" class="headerlink" title="Process and Thread Management"></a>Process and Thread Management</h3><p>A process is basically a program in excution associated with:</p>
+<ul>
+<li><p><strong>Address space</strong>: a list of memory locations which the process can read and write</p>
+<ul>
+<li><p>Defines where several segments are located</p>
+<img src="Introduction/address space.png" style="zoom:50%;" />
+</li>
+<li><p>Defines protection of those sections: ReadOnly, ReadWrite, Execute</p>
+</li>
+</ul>
+</li>
+<li><p><strong>Process table entry</strong>: an array of structures holding all the other information about the process</p>
+</li>
+</ul>
+<h3 id="System-call"><a href="#System-call" class="headerlink" title="System call"></a>System call</h3><p>To obtain services from the opreating system, a user program must make a <strong>system call</strong>, which switches to the kernel mode. There are three ways to transfer from user mode into kernel mode:</p>
+<ul>
+<li>Trap: <strong>TRAP</strong> instruction for system call</li>
+<li>Interrupt: triggered by an event from device</li>
+<li>Execption: triggered by fault</li>
+</ul>
+<p>The <strong>interrupt handler</strong> (_entry in the kernel) identifies them and then jumps to their respective handlers.</p>
+<h3 id="System-call-examples"><a href="#System-call-examples" class="headerlink" title="System call examples"></a>System call examples</h3><img src="Introduction/system call.png" style="zoom:40%;" />
+
+<p><strong>Fork</strong> creates an exact duplicate of the original process. After the fork, the parent and child process go their separate ways. As shown in the follwing example, the fork call returns a value, which is zero in the child and equal to the child’s <strong>PID (Process Identifier)</strong> in the parent. </p>
+<img src="Introduction/fork.png" style="zoom:40%;" />
+
+<p><strong>Clone</strong> also creates a new process. One difference is that it allows the child process to share parts of its execution context with the parent process, such as the memory space. </p>
+<p>The kernel uses <strong>signals</strong> to call into a process. There are a few examples of signals.</p>
+<img src="Introduction/signal.png" style="zoom:60%;" />
+
+<p>When a signal is delivered, </p>
+<h3 id="How-are-syscalls-implemented-user-amp-kernel"><a href="#How-are-syscalls-implemented-user-amp-kernel" class="headerlink" title="How are syscalls implemented(user &amp; kernel)"></a>How are syscalls implemented(user &amp; kernel)</h3><ul>
+<li>Agreed on calling code convention: typically aruguments are passed through regesiters(sometimes on the stack)</li>
+<li>Agreed on definition of system call numbers</li>
+<li>Kernel defines a syscall table, the complier help associate the syscall number with the kernel internal function</li>
+</ul>
+<p>After the <strong>TRAP</strong> instruction switches from user mode to kernel mode, the interrupt handler:</p>
+<ul>
+<li>checks the syscall number</li>
+<li>change the stack to kernel</li>
+<li>call to responding function in syscall table</li>
+<li>switch back to user stack and return from kernel mode</li>
+</ul>
+<h3 id="Steps-in-making-a-system-call"><a href="#Steps-in-making-a-system-call" class="headerlink" title="Steps in making a system call"></a>Steps in making a system call</h3><img src="Introduction/steps.png" style="zoom: 40%;" />
+
+<h2 id="Operating-system-structure"><a href="#Operating-system-structure" class="headerlink" title="Operating system structure"></a>Operating system structure</h2><h3 id="Monolithic-systems"><a href="#Monolithic-systems" class="headerlink" title="Monolithic systems"></a>Monolithic systems</h3><p>In the monolithic approach, the entire opearting system runs as a single program in kernel mode. The operating system is written as a collection of procedures linked together. This organization suggests a basic structure for the operating system:</p>
+<ul>
+<li><p>A <strong>main program</strong> that invokes the requested services</p>
+</li>
+<li><p>A set of <strong>services procedures</strong> that carry out the system calls</p>
+</li>
+<li><p>A set of <strong>utility procedures</strong> that help the service procedure</p>
+</li>
+</ul>
+<img src="Introduction/mono.png" style="zoom:40%;" />
+
+<h3 id="Layered-Systems"><a href="#Layered-Systems" class="headerlink" title="Layered Systems"></a>Layered Systems</h3><p>A generalization is to organize the operating systems as a hierarchy of layers, each one constructed upon the one below it.</p>
+<img src="/Users/katherine/Pilgrimss.github.io/source/_posts/Introduction/layer.png" style="zoom:40%;" />
+
+<h3 id="Microkernels"><a href="#Microkernels" class="headerlink" title="Microkernels"></a>Microkernels</h3><p>Tranditionally, with the layered approach, all the layers went in the kernel. However, a strong case can be made for putting as little as possible in the kernel mode since bugs in kernel can bring down the system instantly. </p>
+<p>The microkernel design split the operating system up into small, well defined modules, only one of which - the <strong>microkernel</strong> - runs in kernel mode. Outside the kernel, the system is structed as three layers of processes all running in user mode.</p>
+<img src="Introduction/minix.png" style="zoom:40%;" />
+
+<h3 id="Client-Sever-Model"><a href="#Client-Sever-Model" class="headerlink" title="Client-Sever Model"></a>Client-Sever Model</h3><p>The client-server model is a slight variation of the microkernel idea, which distinguish two classes of processes, the <strong>server</strong>, which provides some services, and the <strong>clients</strong>, which use these services. Communication between servers and clients is via message passing.</p>
+<img src="Introduction/client.png" alt="client" style="zoom:40%;" />
+
+<h3 id="Virtual-Machine"><a href="#Virtual-Machine" class="headerlink" title="Virtual Machine"></a>Virtual Machine</h3><h4 id="VM-370"><a href="#VM-370" class="headerlink" title="VM/370"></a>VM/370</h4><p>The essence of VM/370 is to completely separate the two functions of  the timesharing system:</p>
+<ul>
+<li>multiprogramming </li>
+<li>an extended machine with more convenient interface than the bare hardware</li>
+</ul>
+<p>The <strong>virtual machine monitor</strong> runs on the bare hardware, does multiprogramming, providing several virtual machines to the next layer up.</p>
+<p>These virtual machines are <strong>exact copies</strong> of the bare hardware, so each one can run any opearting system that will run directly on the bare hardware.</p>
+<img src="Introduction/vm370.png" alt="vm370" style="zoom:40%;" />
+
+<h4 id="Type-1-amp-2-hypervisor"><a href="#Type-1-amp-2-hypervisor" class="headerlink" title="Type 1&amp;2 hypervisor"></a>Type 1&amp;2 hypervisor</h4><p>In type 1 hypervisor, privileged instructions are trapped to the virtual machine monitor, and emulated in software.</p>
+<p>Type 2 hypervisor makes user of a host opearting system </p>
+<img src="Introduction/hypervisor.png" alt="hypervisor" style="zoom:40%;" />
+
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Operating-Systems/" rel="tag"># Operating Systems</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/08/03/Processes-and-Threads/" rel="prev" title="Processes and Threads">
+      <i class="fa fa-chevron-left"></i> Processes and Threads
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/08/03/Scheduling/" rel="next" title="Scheduling">
+      Scheduling <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#What-is-an-operating-system"><span class="nav-number">1.</span> <span class="nav-text">What is an operating system?</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Booting-the-computer"><span class="nav-number">1.1.</span> <span class="nav-text">Booting the computer</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Computer-hardware"><span class="nav-number">2.</span> <span class="nav-text">Computer hardware</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Processors"><span class="nav-number">2.1.</span> <span class="nav-text">Processors</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Memory"><span class="nav-number">2.2.</span> <span class="nav-text">Memory</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#OS-Major-Components"><span class="nav-number">3.</span> <span class="nav-text">OS Major Components</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Process-and-Thread-Management"><span class="nav-number">3.1.</span> <span class="nav-text">Process and Thread Management</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#System-call"><span class="nav-number">3.2.</span> <span class="nav-text">System call</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#System-call-examples"><span class="nav-number">3.3.</span> <span class="nav-text">System call examples</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#How-are-syscalls-implemented-user-amp-kernel"><span class="nav-number">3.4.</span> <span class="nav-text">How are syscalls implemented(user &amp; kernel)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Steps-in-making-a-system-call"><span class="nav-number">3.5.</span> <span class="nav-text">Steps in making a system call</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Operating-system-structure"><span class="nav-number">4.</span> <span class="nav-text">Operating system structure</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Monolithic-systems"><span class="nav-number">4.1.</span> <span class="nav-text">Monolithic systems</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Layered-Systems"><span class="nav-number">4.2.</span> <span class="nav-text">Layered Systems</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Microkernels"><span class="nav-number">4.3.</span> <span class="nav-text">Microkernels</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Client-Sever-Model"><span class="nav-number">4.4.</span> <span class="nav-text">Client-Sever Model</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Virtual-Machine"><span class="nav-number">4.5.</span> <span class="nav-text">Virtual Machine</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#VM-370"><span class="nav-number">4.5.1.</span> <span class="nav-text">VM&#x2F;370</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Type-1-amp-2-hypervisor"><span class="nav-number">4.5.2.</span> <span class="nav-text">Type 1&amp;2 hypervisor</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Katherine</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">29</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Pilgrimss" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Pilgrimss" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:yingeos@gmail.com" title="E-Mail → mailto:yingeos@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://instagram.com/kathyyw12" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;kathyyw12" rel="noopener" target="_blank"><i class="fab fa-instagram fa-fw"></i>Instagram</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://drive.google.com/file/d/1FAOwzqj2iLnyNUCPUU_F-jXl5j2fN_0p/view?usp=sharing" title="About → https:&#x2F;&#x2F;drive.google.com&#x2F;file&#x2F;d&#x2F;1FAOwzqj2iLnyNUCPUU_F-jXl5j2fN_0p&#x2F;view?usp&#x3D;sharing" rel="noopener" target="_blank"><i class="fa fa-user fa-fw"></i>About</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Katherine</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : 'gtbbAeJk0sTgEPBA9thJF4gU-gzGzoHsz',
+      appKey     : '2HUdXVG1bF07KhQJCYIuKdom',
+      placeholder: "Say what you want",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : '' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>

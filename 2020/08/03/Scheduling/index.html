@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"blueflamingo.tech","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="When to schedule? How to choose scheduling algorithms to satisfy different systems?">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Scheduling">
+<meta property="og:url" content="https://blueflamingo.tech/2020/08/03/Scheduling/index.html">
+<meta property="og:site_name" content="Blue Flamingo">
+<meta property="og:description" content="When to schedule? How to choose scheduling algorithms to satisfy different systems?">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Scheduling/Scheduling/burst.png">
+<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Scheduling/Scheduling/goal.png">
+<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Scheduling/Scheduling/rr.png">
+<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Scheduling/Scheduling/prio.png">
+<meta property="article:published_time" content="2020-08-03T19:06:55.000Z">
+<meta property="article:modified_time" content="2020-12-11T02:09:05.329Z">
+<meta property="article:author" content="Katherine">
+<meta property="article:tag" content="Operating System">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blueflamingo.tech/2020/08/03/Scheduling/Scheduling/burst.png">
+
+<link rel="canonical" href="https://blueflamingo.tech/2020/08/03/Scheduling/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>Scheduling | Blue Flamingo</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Blue Flamingo</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+  <a href="https://github.com/Pilgrimss" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueflamingo.tech/2020/08/03/Scheduling/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Katherine">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Blue Flamingo">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Scheduling
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-08-03 15:06:55" itemprop="dateCreated datePublished" datetime="2020-08-03T15:06:55-04:00">2020-08-03</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-12-10 21:09:05" itemprop="dateModified" datetime="2020-12-10T21:09:05-05:00">2020-12-10</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/2020/08/03/Scheduling/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2020/08/03/Scheduling/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+            <div class="post-description">When to schedule? How to choose scheduling algorithms to satisfy different systems?</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="Introduction-to-scheduling"><a href="#Introduction-to-scheduling" class="headerlink" title="Introduction to scheduling"></a>Introduction to scheduling</h1><p>If only one CPU is available, while two or more processes are simultaneously in the Ready state, the <strong>scheduler</strong> has to determine which process to run next. </p>
+<h2 id="CPU-vs-I-O-Bound"><a href="#CPU-vs-I-O-Bound" class="headerlink" title="CPU vs I/O Bound"></a>CPU vs I/O Bound</h2><p>Some process spend most of their time computing, while others spend most of that waiting for I/O. The former are called <strong>CPU-bound</strong>; the latter are called <strong>IO/bound</strong>.</p>
+<img src="Scheduling/burst.png" style="zoom:40%;" />
+
+<h2 id="When-to-Schedule"><a href="#When-to-Schedule" class="headerlink" title="When to Schedule"></a>When to Schedule</h2><p>A key issue related to scheduling is when to make scheduling decisions. There are a variety of situations in which scheduling is needed:</p>
+<ul>
+<li>When a new process is created, a decision needs to be made whether to run the parent process or the child process.</li>
+<li>When a process exits, some other process must be chose from the set of ready processes.</li>
+<li>When a process blocks, another process has to be selected to run.</li>
+<li>When an I/O interrupt occurs, the scheduler need to decide whether to run the newly ready process</li>
+</ul>
+<h2 id="Categories-of-Scheduling-Algorithms"><a href="#Categories-of-Scheduling-Algorithms" class="headerlink" title="Categories of Scheduling Algorithms"></a>Categories of Scheduling Algorithms</h2><h3 id="Nonpreemptive-vs-Preemptive"><a href="#Nonpreemptive-vs-Preemptive" class="headerlink" title="Nonpreemptive vs Preemptive"></a>Nonpreemptive vs Preemptive</h3><p>Scheduling algorithm can be divided into two categories with respect to how they deal with clock interrupt.</p>
+<ul>
+<li><p>A <strong>nonpreemptive</strong> scheduling algorithm picks a process to run and then just lets it run until it blocks or voluntarily releases the CPU.</p>
+</li>
+<li><p>A <strong>preemptive</strong> scheduling algorithm pricks a process and lets it run for a maximum of some fixed time. If it is still running at the end of the time interval, it is suspended and the scheduler picks another process to run.</p>
+</li>
+</ul>
+<h3 id="Batch-Interactive-Real-time"><a href="#Batch-Interactive-Real-time" class="headerlink" title="Batch, Interactive, Real-time"></a>Batch, Interactive, Real-time</h3><p>In different environments different scheduling algorithms are needed. Three environment worth distinguishing are:</p>
+<ul>
+<li>Batch<ul>
+<li>In batch system, there are no users impatiently waiting for a quick response</li>
+<li>Nonpreemptive algorithms, or preemptive algorithms with long time periods for each process, are all acceptable.</li>
+</ul>
+</li>
+<li>Interactive<ul>
+<li>With interactive users, preemption is essential to keep one process from hogging the CPU and denying service to the others</li>
+</ul>
+</li>
+<li>Real time</li>
+</ul>
+<p>There are some goals when designing a scheduling algorithm.</p>
+<img src="Scheduling/goal.png" style="zoom:40%;" />
+
+<h1 id="Scheduling-in-Batch-Systems"><a href="#Scheduling-in-Batch-Systems" class="headerlink" title="Scheduling in Batch Systems"></a>Scheduling in Batch Systems</h1><h2 id="First-Come-First-Served"><a href="#First-Come-First-Served" class="headerlink" title="First-Come, First Served"></a>First-Come, First Served</h2><p>With this nonpreemptive algorithm, process are assigned the CPU in order they request it.</p>
+<ul>
+<li>There is a single queue of ready processes</li>
+<li>New processes are put on the end of the queue</li>
+<li>When the running process blocks, the first process on the queue runs next</li>
+<li>When a blocked process becomes ready, it is put on the end of the queue.</li>
+</ul>
+<h2 id="Shortest-Job-First"><a href="#Shortest-Job-First" class="headerlink" title="Shortest Job First"></a>Shortest Job First</h2><p>This nonpreemptive algorithm assumes that the run time are known in advance. When several jobs are waiting to be started, the scheduler picks the <strong>shortest job first</strong>. It is optimal only when all the jobs are available simultaneously.</p>
+<h2 id="Shortest-Remaining-Time-Next"><a href="#Shortest-Remaining-Time-Next" class="headerlink" title="Shortest Remaining Time Next"></a>Shortest Remaining Time Next</h2><p>This algorithm is a preemptive version of shortest job first:</p>
+<ul>
+<li>The scheduler always chooses the process whose remaining run time is the shortest.</li>
+<li>When a new job arrives, its total time is compared to the current process’s remaining time. If less, the current process is suspended and the new job started.</li>
+</ul>
+<h1 id="Scheduling-in-Interactive-System"><a href="#Scheduling-in-Interactive-System" class="headerlink" title="Scheduling in Interactive System"></a>Scheduling in Interactive System</h1><h2 id="Round-Robin-Scheduling"><a href="#Round-Robin-Scheduling" class="headerlink" title="Round-Robin Scheduling"></a>Round-Robin Scheduling</h2><ul>
+<li>Each process is assigned a time interval called <strong>quantum</strong>.</li>
+<li>If the process is still running at the end of the quantum, the CPU is preempted and given to another process.</li>
+<li>The scheduler need to maintain a list of runnable processes.</li>
+</ul>
+<img src="Scheduling/rr.png" style="zoom:40%;" />
+
+<p>An interesting issue is the length of the quantum. Setting the quantum too short causes too many context switches and lowers the CPU efficiency, while setting it too long may cause poor response to short interactive requests. If the quantum is set longer than the mean CPU burst, preemption will not often happen.</p>
+<h2 id="Priority-Scheduling"><a href="#Priority-Scheduling" class="headerlink" title="Priority Scheduling"></a>Priority Scheduling</h2><p>Each process is assigned a priority, and the runnable process with the highest priority is allowed to run.</p>
+<p>To prevent high-priority processes from running forever:</p>
+<ul>
+<li>the scheduler may decrease the priority of the currently running process at each clock interrupt</li>
+<li>Each process may be assigned a maximum time quantum, when it is used up, the next-highest-priority process is given a chance to run.</li>
+</ul>
+<p>Priorities can be assigned to processes statically or dynamically.  </p>
+<p>It’s wise to set a higher-priority to <strong>I/O bound</strong> tasks. Whenever such a process wants CPU, it should be given the CPU immediately, to let it start its next I/O request, which can then proceed in parallel with another process actually computing.</p>
+<h3 id="Multiple-Queues"><a href="#Multiple-Queues" class="headerlink" title="Multiple Queues"></a>Multiple Queues</h3><p>It is often convenient to group processes into priority classes and use priority scheduling among the classes but round-robin scheduling within each class.</p>
+<ul>
+<li>When there are runnable processes in higher-priority classes, just run each one in round-robin fashion and never bother with lower-priority classes.</li>
+<li>When high-priority classes are empty, run lower class round-robin, and so on.</li>
+<li>If the priorities are not adjusted occasionally, lower-priority classes may starve to death.</li>
+</ul>
+<img src="Scheduling/prio.png" style="zoom:40%;" />
+
+<h3 id="Multi-Level-Feedback-Queues"><a href="#Multi-Level-Feedback-Queues" class="headerlink" title="Multi-Level Feedback Queues"></a>Multi-Level Feedback Queues</h3><p>Each process is assgined two priority:</p>
+<ul>
+<li>static priority: non-changing unless requested through system call</li>
+<li>dynamic priority: lies in $[0, static_priority - 1]$, changes constantly based on current state of the process</li>
+</ul>
+<p>Scheduling is done on a preemptive basis, and a dynamic priority mechanism is used.</p>
+<ul>
+<li>When a process has be preempted, decrement its dynamic priority; </li>
+</ul>
+<p>When it reaches $-1$, reset it to $static_priority - 1$.</p>
+<h2 id="Lottery-Scheduling"><a href="#Lottery-Scheduling" class="headerlink" title="Lottery Scheduling"></a>Lottery Scheduling</h2><p>The basic idea is to give processes lottery tickets for various system resources, such as CPU time. </p>
+<ul>
+<li>When a scheduling decision is made, a lottery ticker is chosen at random, and the process holding that ticket gets the resource. </li>
+<li>More important processes can be given extra tickets, to increase their odds of winning.</li>
+<li>Cooperating processes may exchange tickets if they wish.</li>
+</ul>
+<h2 id="Fair-Share-Scheduling"><a href="#Fair-Share-Scheduling" class="headerlink" title="Fair-Share Scheduling"></a>Fair-Share Scheduling</h2><p>This model takes into account which user owns a process before scheduling it. In this model, each user is allocated some fraction of the CPU and the scheduler picks processes in such a way as to enforce it.</p>
+<h1 id="Scheduling-in-Real-Time-Systems"><a href="#Scheduling-in-Real-Time-Systems" class="headerlink" title="Scheduling in Real-Time Systems"></a>Scheduling in Real-Time Systems</h1><p>Real-time systems are generally categorized as:</p>
+<ul>
+<li><strong>Hard real time</strong>: there are absolute deadlines that must be met</li>
+<li><strong>Soft real time</strong>: missing an occasional dealine is tolerable</li>
+</ul>
+<p>The events that a real-time system responds to can be categorized as:</p>
+<ul>
+<li><strong>Periodic</strong>: occur at regular intervals</li>
+<li><strong>Aperiodic</strong>: occur unpredictably</li>
+</ul>
+<p>If there are $m$ periodic events and event $i$ occurs with period $P_i$ and requires $C_i$ seconds of CPU time to handle each event, then the load can be handled only if<br>$$<br>\sum_{i=1}^m \frac{C_i}{P_i} \leq 1<br>$$<br>A real-time that meets this criterion is said to be <strong>schedulable</strong>.</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Operating-System/" rel="tag"># Operating System</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/08/03/Introduction/" rel="prev" title="Introduction to operating systems">
+      <i class="fa fa-chevron-left"></i> Introduction to operating systems
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/08/03/Concurrency/" rel="next" title="Concurrency">
+      Concurrency <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Introduction-to-scheduling"><span class="nav-number">1.</span> <span class="nav-text">Introduction to scheduling</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#CPU-vs-I-O-Bound"><span class="nav-number">1.1.</span> <span class="nav-text">CPU vs I&#x2F;O Bound</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#When-to-Schedule"><span class="nav-number">1.2.</span> <span class="nav-text">When to Schedule</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Categories-of-Scheduling-Algorithms"><span class="nav-number">1.3.</span> <span class="nav-text">Categories of Scheduling Algorithms</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Nonpreemptive-vs-Preemptive"><span class="nav-number">1.3.1.</span> <span class="nav-text">Nonpreemptive vs Preemptive</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Batch-Interactive-Real-time"><span class="nav-number">1.3.2.</span> <span class="nav-text">Batch, Interactive, Real-time</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Scheduling-in-Batch-Systems"><span class="nav-number">2.</span> <span class="nav-text">Scheduling in Batch Systems</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#First-Come-First-Served"><span class="nav-number">2.1.</span> <span class="nav-text">First-Come, First Served</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Shortest-Job-First"><span class="nav-number">2.2.</span> <span class="nav-text">Shortest Job First</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Shortest-Remaining-Time-Next"><span class="nav-number">2.3.</span> <span class="nav-text">Shortest Remaining Time Next</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Scheduling-in-Interactive-System"><span class="nav-number">3.</span> <span class="nav-text">Scheduling in Interactive System</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Round-Robin-Scheduling"><span class="nav-number">3.1.</span> <span class="nav-text">Round-Robin Scheduling</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Priority-Scheduling"><span class="nav-number">3.2.</span> <span class="nav-text">Priority Scheduling</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Multiple-Queues"><span class="nav-number">3.2.1.</span> <span class="nav-text">Multiple Queues</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Multi-Level-Feedback-Queues"><span class="nav-number">3.2.2.</span> <span class="nav-text">Multi-Level Feedback Queues</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Lottery-Scheduling"><span class="nav-number">3.3.</span> <span class="nav-text">Lottery Scheduling</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Fair-Share-Scheduling"><span class="nav-number">3.4.</span> <span class="nav-text">Fair-Share Scheduling</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Scheduling-in-Real-Time-Systems"><span class="nav-number">4.</span> <span class="nav-text">Scheduling in Real-Time Systems</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Katherine</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">29</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Pilgrimss" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Pilgrimss" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:yingeos@gmail.com" title="E-Mail → mailto:yingeos@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://instagram.com/kathyyw12" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;kathyyw12" rel="noopener" target="_blank"><i class="fab fa-instagram fa-fw"></i>Instagram</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://drive.google.com/file/d/1FAOwzqj2iLnyNUCPUU_F-jXl5j2fN_0p/view?usp=sharing" title="About → https:&#x2F;&#x2F;drive.google.com&#x2F;file&#x2F;d&#x2F;1FAOwzqj2iLnyNUCPUU_F-jXl5j2fN_0p&#x2F;view?usp&#x3D;sharing" rel="noopener" target="_blank"><i class="fa fa-user fa-fw"></i>About</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Katherine</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : 'gtbbAeJk0sTgEPBA9thJF4gU-gzGzoHsz',
+      appKey     : '2HUdXVG1bF07KhQJCYIuKdom',
+      placeholder: "Say what you want",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : '' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>

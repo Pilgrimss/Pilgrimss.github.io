@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"blueflamingo.tech","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="This article introudce the concept of process, its life cycle, implementation and several different process state models. It also discusses the counterpart of threads and techniques of multi-threading">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Processes and Threads">
+<meta property="og:url" content="https://blueflamingo.tech/2020/08/03/Processes-and-Threads/index.html">
+<meta property="og:site_name" content="Blue Flamingo">
+<meta property="og:description" content="This article introudce the concept of process, its life cycle, implementation and several different process state models. It also discusses the counterpart of threads and techniques of multi-threading">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Processes-and-Threads/Processes-and-Threads/pte.png">
+<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Processes-and-Threads/Processes-and-Threads/2state.png">
+<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Processes-and-Threads/Processes-and-Threads/3state.png">
+<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Processes-and-Threads/Processes-and-Threads/5state.png">
+<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Processes-and-Threads/Processes-and-Threads/suspend.png">
+<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Processes-and-Threads/Processes-and-Threads/queue.png">
+<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Processes-and-Threads/Processes-and-Threads/multi.png">
+<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Processes-and-Threads/Processes-and-Threads/cpu.png">
+<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Processes-and-Threads/Processes-and-Threads/web.png">
+<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Processes-and-Threads/Processes-and-Threads/thread.png">
+<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Processes-and-Threads/Processes-and-Threads/prop.png">
+<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Processes-and-Threads/Processes-and-Threads/multithread.png">
+<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Processes-and-Threads/Processes-and-Threads/imple.png">
+<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Processes-and-Threads/Processes-and-Threads/pac.png">
+<meta property="og:image" content="https://blueflamingo.tech/2020/08/03/Processes-and-Threads/Processes-and-Threads/rela.png">
+<meta property="article:published_time" content="2020-08-03T19:06:26.000Z">
+<meta property="article:modified_time" content="2020-12-11T02:10:23.633Z">
+<meta property="article:author" content="Katherine">
+<meta property="article:tag" content="Operating Systems">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blueflamingo.tech/2020/08/03/Processes-and-Threads/Processes-and-Threads/pte.png">
+
+<link rel="canonical" href="https://blueflamingo.tech/2020/08/03/Processes-and-Threads/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>Processes and Threads | Blue Flamingo</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Blue Flamingo</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+  <a href="https://github.com/Pilgrimss" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blueflamingo.tech/2020/08/03/Processes-and-Threads/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Katherine">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Blue Flamingo">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Processes and Threads
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-08-03 15:06:26" itemprop="dateCreated datePublished" datetime="2020-08-03T15:06:26-04:00">2020-08-03</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-12-10 21:10:23" itemprop="dateModified" datetime="2020-12-10T21:10:23-05:00">2020-12-10</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/2020/08/03/Processes-and-Threads/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2020/08/03/Processes-and-Threads/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+            <div class="post-description">This article introudce the concept of process, its life cycle, implementation and several different process state models. It also discusses the counterpart of threads and techniques of multi-threading.</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="Processes"><a href="#Processes" class="headerlink" title="Processes"></a>Processes</h1><h2 id="The-Process-Model"><a href="#The-Process-Model" class="headerlink" title="The Process Model"></a>The Process Model</h2><p>A process is an instance of an executing program, including the current values of the:</p>
+<ul>
+<li>Program counter: points at current instruction</li>
+<li>Registers</li>
+<li>Variables</li>
+</ul>
+<p>A process is an activity with its program, input, output and a state. If a program is running twice, it counts as two processes.</p>
+<h2 id="Process-Creation"><a href="#Process-Creation" class="headerlink" title="Process Creation"></a>Process Creation</h2><p>Four principal events cause processes to be created.</p>
+<ul>
+<li>System initialization: when an operating system is booted, two kinds of processes  are created.<ul>
+<li>Foreground processes that interact with users</li>
+<li>Background processes (daemons) that handle activities like email, Web pages</li>
+</ul>
+</li>
+<li>Execution of a process-creation system call by a running process: often a running process will issue system calls to create one or more new processes to help it do its job</li>
+<li>A user request to create a new process: in interactive systems, users can start a program by typing a command or clicking on an icon.</li>
+<li>Initiation of a batch job</li>
+</ul>
+<h2 id="Process-Termination"><a href="#Process-Termination" class="headerlink" title="Process Termination"></a>Process Termination</h2><p>Processes will terminate usually due to one of the following conditions:</p>
+<ul>
+<li>Normal exit (voluntary)</li>
+<li>Error exit (voluntary)</li>
+<li>Fatal error (involuntary)</li>
+<li>Killed by another process (involuntary)</li>
+</ul>
+<h2 id="Implementation-of-Processes"><a href="#Implementation-of-Processes" class="headerlink" title="Implementation of Processes"></a>Implementation of Processes</h2><p>The operating system maintains a table (an array of structures), called the <strong>process table</strong>, with one entry (<strong>process control block</strong>) per process, which contains important information about the process’s state.</p>
+<img src="Processes-and-Threads/pte.png" style="zoom:40%;" />
+
+<h2 id="Process-State-Models"><a href="#Process-State-Models" class="headerlink" title="Process State Models"></a>Process State Models</h2><h3 id="A-Two-State-Process-Model"><a href="#A-Two-State-Process-Model" class="headerlink" title="A Two-State Process Model"></a>A Two-State Process Model</h3><p>In this model, a process may be in one of two states: <strong>Running</strong> or <strong>Not Running</strong>.  </p>
+<ul>
+<li>When the OS creates a new process, it creates a process control block for the process and enter the process into the system into the Not Running state.  </li>
+<li>From time to time, the currently running process will be interrupted, and the dispatcher will select some other process to run. </li>
+<li>The former process moves from the Running state to the Not Running state, and one of the other processes moves to the Running state. </li>
+</ul>
+<p>Process not running must be kept in a <strong>queue</strong>, waiting their turn to execute.</p>
+<img src="Processes-and-Threads/2state.png" style="zoom:40%;" />
+
+<h3 id="A-Three-State-Process-Model"><a href="#A-Three-State-Process-Model" class="headerlink" title="A Three-State Process Model"></a>A Three-State Process Model</h3><p>In this model, a process may be in three states:</p>
+<ul>
+<li><strong>Running</strong> (actually using the CPU) at that instant</li>
+<li><strong>Ready</strong> (runnable; temporarily stopped to let another process run)</li>
+<li><strong>Blocked</strong> (unable to run until some externel event happens)</li>
+</ul>
+<img src="Processes-and-Threads/3state.png" style="zoom:40%;" />
+
+<h3 id="A-Five-State-Process-Model"><a href="#A-Five-State-Process-Model" class="headerlink" title="A Five-State Process Model"></a>A Five-State Process Model</h3><p>In this model, we add the New and Exit states:</p>
+<ul>
+<li><strong>New</strong>: created but has not yet been admitted to the pool of executable processes. For example, although the process control block has been created, the new process may not yet has been loaded into main memory.</li>
+<li><strong>Exit</strong>: released from the pool of executable processes because it halted or aborted.</li>
+</ul>
+<img src="Processes-and-Threads/5state.png" style="zoom:40%;" />
+
+<h3 id="With-suspened-states"><a href="#With-suspened-states" class="headerlink" title="With suspened states"></a>With suspened states</h3><p>When none of the processes in main memory is in the Ready queue:</p>
+<ul>
+<li>The OS <strong>swaps</strong> one of the blocked processes <strong>out to disk</strong> into a suspend queue. This is a queue of existing processes that have been temporarily kicked out of main memory, or suspended.</li>
+<li>Then the OS brings in another process from the suspended queue, or it admits a newly created process.</li>
+</ul>
+<p>With the use of swapping, the <strong>Suspend</strong> state must be added to this model.</p>
+<p>However, there still exists one problem: all of the processes in the Supsend state were in the Blocked state at the time of suspension, and there is no good to bring a blocked process back into main memory.</p>
+<p>Therefore, we need to distinguish the two independent concepts: whether a process is waiting on an event (<strong>blocked</strong> or not) and whether a process has been swapped out of main  memory (<strong>suspended</strong> or not).</p>
+<p>To accommodate this $2\times 2$ combination, we need four states:</p>
+<ul>
+<li><strong>Ready</strong>: in main memory and runnable</li>
+<li><strong>Blocked</strong>: in main memory but not runnable</li>
+<li><strong>Blocked/Suspend</strong>: in secondary memory and waiting on an event</li>
+<li><strong>Ready/Suspend</strong>: in secondary memory but ready for execution</li>
+</ul>
+<img src="Processes-and-Threads/suspend.png" style="zoom:40%;" />
+
+<h3 id="Using-queues-to-Mange-Processes"><a href="#Using-queues-to-Mange-Processes" class="headerlink" title="Using queues to Mange Processes"></a>Using queues to Mange Processes</h3><p>In the two-state model, we maintain process in the Not Running state in a single queue. However, this implementation is inadquate: some processes in the Not Running state are ready to execute while others are blocked. Thus, with a single queue, the dispatcher would have to scan the queue looking for a ready one.</p>
+<p>We can manage the processes with two queues: a <strong>Ready queue</strong> and a <strong>Blocked</strong> queue. </p>
+<ul>
+<li>As each process is admitted to the system, it is placed in the Ready queue.</li>
+<li>The dispatcher select one process to run from the Ready queue.</li>
+<li>A running process removed from execution but not yet finish can be placed in the Ready queue or Blocked queue.</li>
+<li>When an event occurs, any process in the Blocked queue waiting on that event only is moved to the Ready queue.</li>
+</ul>
+<p>We can also use multiple Blocked queues, one for each event. </p>
+<img src="Processes-and-Threads/queue.png" style="zoom:40%;" />
+
+<h2 id="Multiprogramming"><a href="#Multiprogramming" class="headerlink" title="Multiprogramming"></a>Multiprogramming</h2><p>Conceptually, each process has its own virtual CPU. In reality, the real CPU switched back and forth from process to process. This rapid switching is call <strong>multiprogramming</strong>. At any given time, only one process is actually running.</p>
+<img src="Processes-and-Threads/multi.png" style="zoom:40%;" />
+
+<p>Suppose that a process spends a fraction $p$ of its time waiting for I/O to complete. With $n$ rpocesses in memory at once, the <strong>CPU utilization = $1- p^n$</strong>, which is called the <strong>degree of multiprogramming</strong>.</p>
+<img src="Processes-and-Threads/cpu.png" style="zoom:40%;" />
+
+<h1 id="Threads"><a href="#Threads" class="headerlink" title="Threads"></a>Threads</h1><p>All threads of a process share the same address space and resources (except for stack). </p>
+<p>There are several reasons for having threads:</p>
+<ul>
+<li> In many applications, multiple activities are going on at once. With threads, programming becomes simpler. It also allows activities to overlap, thus speeding up the application.</li>
+<li>Threads are lighter weight than processes, faster to create and destroy. </li>
+</ul>
+<p>Now consider an example of a web server. </p>
+<ul>
+<li>The <strong>dispatche</strong>r thread reads incoming requests from the network. </li>
+<li>After examining the request, it wakes up an blocked <strong>worker</strong> thread and hands it the request.</li>
+<li>When the worker wakes up, it checks to see if the request can be satisfied from the Web page cache. If not, it <strong>read</strong> from the disk and block until the disk operation completes.</li>
+<li>When the worker locks, another thread is chose to run.</li>
+</ul>
+<img src="Processes-and-Threads/web.png" style="zoom:40%;" />
+
+<h2 id="Processes-amp-Threads"><a href="#Processes-amp-Threads" class="headerlink" title="Processes &amp; Threads"></a>Processes &amp; Threads</h2><p>In a multithreaded environment, there is stilll a single process control block and user address space, but now there are <strong>separate</strong> stacks for each thread, as well as a separate control block containing register values, priority and other thread-realated state information. There is no protection between threads. </p>
+<img src="Processes-and-Threads/thread.png" style="zoom:40%;" />
+
+<p>Process is the unit of resource management, while thread is the unit of execution.</p>
+<img src="Processes-and-Threads/prop.png" style="zoom:40%;" />
+
+<h2 id="Multithreading"><a href="#Multithreading" class="headerlink" title="Multithreading"></a>Multithreading</h2><p>Allowing multiple threads in the same process is called <strong>multithreading</strong>. On a uniprocessor, multiprogramming enables the interlevaing of multiple threads within multiple processres.</p>
+<img src="Processes-and-Threads/multithread.png" style="zoom:40%;" />
+
+<h2 id="Implementation-of-Threads"><a href="#Implementation-of-Threads" class="headerlink" title="Implementation of Threads"></a>Implementation of Threads</h2><p>There are two main places to implement threads: user space and kernel space, and a hybrid choice is also possible.</p>
+<img src="Processes-and-Threads/imple.png" style="zoom:40%;" />
+
+<img src="Processes-and-Threads/pac.png" style="zoom:40%;" />
+
+<h3 id="User-Level-Threads-ULTs"><a href="#User-Level-Threads-ULTs" class="headerlink" title="User-Level Threads (ULTs)"></a>User-Level Threads (ULTs)</h3><p>In ULT, thread management is done by the application and the kernel is not aware of the existence of threads. With this approach, threads are implemented by a library. </p>
+<p>The kernel continues to schedule the process as a unit and assigns a single execution state.</p>
+<p><strong>Advantages</strong> of ULT:</p>
+<ul>
+<li><p>Thread swithcing does not require kernel mode.</p>
+</li>
+<li><p>Scheduling can be applicaion specific. The scheduling algorithm can be tailored to the application without distrurbing the underlying OS scheduler.</p>
+</li>
+<li><p>A user-level threads package can be implemented on any os, even those does not support threads.</p>
+</li>
+<li><p>They also scales better, since thread tables and some stacks are not in the kernel.</p>
+</li>
+</ul>
+<p>Disadvantages:</p>
+<ul>
+<li>When a ULT executes a blocking system call or causes a page fault all of the threads within the process are blocked.</li>
+<li>A multithreaded application cannnot take advantage of multiprocessing, since a kernel assigns one process to onely one processor at a time.</li>
+</ul>
+<h3 id="Kernel-Level-Threads-KLTs"><a href="#Kernel-Level-Threads-KLTs" class="headerlink" title="Kernel-Level Threads (KLTs)"></a>Kernel-Level Threads (KLTs)</h3><p>In KLT, thread management is done by the kernel. No runtime system is needed in each process.</p>
+<p><strong>Advantages</strong> of KLT:</p>
+<ul>
+<li><p>the kernel can simultaneously schedule multiple threads from the same process on multiple processors</p>
+</li>
+<li><p>if one thread is blocked, the kernel can schedule anothr thread of the same process.</p>
+</li>
+<li><p>kernel routines can be multithreaded</p>
+</li>
+</ul>
+<p>The principal <strong>disadvantage</strong> is the substantial cost of system call. When a thread wants to create a new thread or destroy an existing thread, it makes a kernel call. All calls that may blcok a thread are also implemented as system calls, at considerably greater cost than a call to a run-time systm procedure.</p>
+<h3 id="Hybrid-Approach"><a href="#Hybrid-Approach" class="headerlink" title="Hybrid Approach"></a>Hybrid Approach</h3><p>In a combined system, thread creation is done completely in user space, as is the bulk of the scheduling and synchronization of threads within an application. The multiple ULTs from a single application are mapped onto some (smaller or equal) number of KLTs.</p>
+<img src="Processes-and-Threads/rela.png" style="zoom:40%;" />
+
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Operating-Systems/" rel="tag"># Operating Systems</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/07/20/Multi-Image-Matching-via-Fast-Alternating-Minimization/" rel="prev" title="Multi-Image Matching via Fast Alternating Minimization">
+      <i class="fa fa-chevron-left"></i> Multi-Image Matching via Fast Alternating Minimization
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/08/03/Introduction/" rel="next" title="Introduction to operating systems">
+      Introduction to operating systems <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Processes"><span class="nav-number">1.</span> <span class="nav-text">Processes</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#The-Process-Model"><span class="nav-number">1.1.</span> <span class="nav-text">The Process Model</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Process-Creation"><span class="nav-number">1.2.</span> <span class="nav-text">Process Creation</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Process-Termination"><span class="nav-number">1.3.</span> <span class="nav-text">Process Termination</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Implementation-of-Processes"><span class="nav-number">1.4.</span> <span class="nav-text">Implementation of Processes</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Process-State-Models"><span class="nav-number">1.5.</span> <span class="nav-text">Process State Models</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#A-Two-State-Process-Model"><span class="nav-number">1.5.1.</span> <span class="nav-text">A Two-State Process Model</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#A-Three-State-Process-Model"><span class="nav-number">1.5.2.</span> <span class="nav-text">A Three-State Process Model</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#A-Five-State-Process-Model"><span class="nav-number">1.5.3.</span> <span class="nav-text">A Five-State Process Model</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#With-suspened-states"><span class="nav-number">1.5.4.</span> <span class="nav-text">With suspened states</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Using-queues-to-Mange-Processes"><span class="nav-number">1.5.5.</span> <span class="nav-text">Using queues to Mange Processes</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Multiprogramming"><span class="nav-number">1.6.</span> <span class="nav-text">Multiprogramming</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Threads"><span class="nav-number">2.</span> <span class="nav-text">Threads</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Processes-amp-Threads"><span class="nav-number">2.1.</span> <span class="nav-text">Processes &amp; Threads</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Multithreading"><span class="nav-number">2.2.</span> <span class="nav-text">Multithreading</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Implementation-of-Threads"><span class="nav-number">2.3.</span> <span class="nav-text">Implementation of Threads</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#User-Level-Threads-ULTs"><span class="nav-number">2.3.1.</span> <span class="nav-text">User-Level Threads (ULTs)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Kernel-Level-Threads-KLTs"><span class="nav-number">2.3.2.</span> <span class="nav-text">Kernel-Level Threads (KLTs)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Hybrid-Approach"><span class="nav-number">2.3.3.</span> <span class="nav-text">Hybrid Approach</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Katherine</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">29</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Pilgrimss" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Pilgrimss" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:yingeos@gmail.com" title="E-Mail → mailto:yingeos@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://instagram.com/kathyyw12" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;kathyyw12" rel="noopener" target="_blank"><i class="fab fa-instagram fa-fw"></i>Instagram</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://drive.google.com/file/d/1FAOwzqj2iLnyNUCPUU_F-jXl5j2fN_0p/view?usp=sharing" title="About → https:&#x2F;&#x2F;drive.google.com&#x2F;file&#x2F;d&#x2F;1FAOwzqj2iLnyNUCPUU_F-jXl5j2fN_0p&#x2F;view?usp&#x3D;sharing" rel="noopener" target="_blank"><i class="fa fa-user fa-fw"></i>About</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Katherine</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : 'gtbbAeJk0sTgEPBA9thJF4gU-gzGzoHsz',
+      appKey     : '2HUdXVG1bF07KhQJCYIuKdom',
+      placeholder: "Say what you want",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : '' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>
